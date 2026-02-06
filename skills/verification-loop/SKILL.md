@@ -1,39 +1,42 @@
-# Verification Loop Skill
+# 検証ループスキル
 
-A comprehensive verification system for Claude Code sessions.
+Claude Code セッションの包括的な検証システム。
 
-## When to Use
+## 使用時期
 
-Invoke this skill:
-- After completing a feature or significant code change
-- Before creating a PR
-- When you want to ensure quality gates pass
-- After refactoring
+このスキルを呼び出す：
+- 機能の完了または重要なコード変更後
+- PR を作成する前
+- 品質ゲートが通ることを確認したい場合
+- リファクタリング後
 
-## Verification Phases
+## 検証フェーズ
 
-### Phase 1: Build Verification
+### フェーズ 1: ビルド検証
+
 ```bash
-# Check if project builds
+# プロジェクトがビルドされているかを確認
 npm run build 2>&1 | tail -20
-# OR
+# または
 pnpm build 2>&1 | tail -20
 ```
 
-If build fails, STOP and fix before continuing.
+ビルドが失敗した場合は停止して修正してください。
 
-### Phase 2: Type Check
+### フェーズ 2: 型チェック
+
 ```bash
-# TypeScript projects
+# TypeScript プロジェクト
 npx tsc --noEmit 2>&1 | head -30
 
-# Python projects
+# Python プロジェクト
 pyright . 2>&1 | head -30
 ```
 
-Report all type errors. Fix critical ones before continuing.
+すべての型エラーをレポート。続行する前に重大なものを修正してください。
 
-### Phase 3: Lint Check
+### フェーズ 3: Lint チェック
+
 ```bash
 # JavaScript/TypeScript
 npm run lint 2>&1 | head -30
@@ -42,79 +45,82 @@ npm run lint 2>&1 | head -30
 ruff check . 2>&1 | head -30
 ```
 
-### Phase 4: Test Suite
+### フェーズ 4: テストスイート
+
 ```bash
-# Run tests with coverage
+# カバレッジを使用してテストを実行
 npm run test -- --coverage 2>&1 | tail -50
 
-# Check coverage threshold
-# Target: 80% minimum
+# カバレッジしきい値を確認
+# 目標: 最小 80%
 ```
 
-Report:
-- Total tests: X
-- Passed: X
-- Failed: X
-- Coverage: X%
+レポート：
+- テスト総数：X
+- 成功：X
+- 失敗：X
+- カバレッジ：X%
 
-### Phase 5: Security Scan
+### フェーズ 5: セキュリティスキャン
+
 ```bash
-# Check for secrets
+# シークレットを確認
 grep -rn "sk-" --include="*.ts" --include="*.js" . 2>/dev/null | head -10
 grep -rn "api_key" --include="*.ts" --include="*.js" . 2>/dev/null | head -10
 
-# Check for console.log
+# console.log を確認
 grep -rn "console.log" --include="*.ts" --include="*.tsx" src/ 2>/dev/null | head -10
 ```
 
-### Phase 6: Diff Review
+### フェーズ 6: 差分レビュー
+
 ```bash
-# Show what changed
+# 何が変わったかを表示
 git diff --stat
 git diff HEAD~1 --name-only
 ```
 
-Review each changed file for:
-- Unintended changes
-- Missing error handling
-- Potential edge cases
+各変更ファイルをレビュー：
+- 意図しない変更
+- エラーハンドリングの欠落
+- 潜在的なエッジケース
 
-## Output Format
+## 出力形式
 
-After running all phases, produce a verification report:
+すべてのフェーズを実行した後、検証レポートを生成します：
 
 ```
-VERIFICATION REPORT
-==================
+検証レポート
+==============
 
-Build:     [PASS/FAIL]
-Types:     [PASS/FAIL] (X errors)
-Lint:      [PASS/FAIL] (X warnings)
-Tests:     [PASS/FAIL] (X/Y passed, Z% coverage)
-Security:  [PASS/FAIL] (X issues)
-Diff:      [X files changed]
+ビルド:     [PASS/FAIL]
+型:        [PASS/FAIL] (X エラー)
+Lint:      [PASS/FAIL] (X 警告)
+テスト:    [PASS/FAIL] (X/Y 成功、Z% カバレッジ)
+セキュリティ: [PASS/FAIL] (X 問題)
+差分:      [X ファイル変更]
 
-Overall:   [READY/NOT READY] for PR
+全体:      [PR 準備完了/準備未完了]
 
-Issues to Fix:
+修正する問題:
 1. ...
 2. ...
 ```
 
-## Continuous Mode
+## 継続モード
 
-For long sessions, run verification every 15 minutes or after major changes:
+長いセッションの場合は、15 分ごと、または大きな変更後に検証を実行します：
 
 ```markdown
-Set a mental checkpoint:
-- After completing each function
-- After finishing a component
-- Before moving to next task
+メンタルチェックポイントを設定：
+- 各関数の完了後
+- コンポーネントの完了後
+- 次のタスクに移動する前
 
-Run: /verify
+実行: /verify
 ```
 
-## Integration with Hooks
+## フックとの統合
 
-This skill complements PostToolUse hooks but provides deeper verification.
-Hooks catch issues immediately; this skill provides comprehensive review.
+このスキルは PostToolUse フックを補完していますが、より深い検証を提供します。
+フックはすぐに問題をキャッチしますが、このスキルは包括的なレビューを提供します。

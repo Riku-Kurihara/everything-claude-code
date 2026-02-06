@@ -1,91 +1,91 @@
 ---
 name: java-coding-standards
-description: Java coding standards for Spring Boot services: naming, immutability, Optional usage, streams, exceptions, generics, and project layout.
+description: Spring Boot サービス向けの Java コーディング標準: 命名、不変性、Optional の使用、ストリーム、例外、ジェネリクス、プロジェクト レイアウト。
 ---
 
-# Java Coding Standards
+# Java コーディング標準
 
-Standards for readable, maintainable Java (17+) code in Spring Boot services.
+Spring Boot サービスの読みやすく、保守しやすい Java (17+) コードのための標準。
 
-## Core Principles
+## コア原則
 
-- Prefer clarity over cleverness
-- Immutable by default; minimize shared mutable state
-- Fail fast with meaningful exceptions
-- Consistent naming and package structure
+- 賢さより明確さを優先
+- デフォルトで不変; 共有可能な可変状態を最小化
+- 意味のある例外で迅速に失敗
+- 一貫した命名とパッケージ構造
 
-## Naming
+## 命名
 
 ```java
-// ✅ Classes/Records: PascalCase
+// ✅ クラス/レコード: PascalCase
 public class MarketService {}
 public record Money(BigDecimal amount, Currency currency) {}
 
-// ✅ Methods/fields: camelCase
+// ✅ メソッド/フィールド: camelCase
 private final MarketRepository marketRepository;
 public Market findBySlug(String slug) {}
 
-// ✅ Constants: UPPER_SNAKE_CASE
+// ✅ 定数: UPPER_SNAKE_CASE
 private static final int MAX_PAGE_SIZE = 100;
 ```
 
-## Immutability
+## 不変性
 
 ```java
-// ✅ Favor records and final fields
+// ✅ レコードと final フィールドを優先
 public record MarketDto(Long id, String name, MarketStatus status) {}
 
 public class Market {
   private final Long id;
   private final String name;
-  // getters only, no setters
+  // ゲッターのみ、セッターなし
 }
 ```
 
-## Optional Usage
+## Optional の使用
 
 ```java
-// ✅ Return Optional from find* methods
+// ✅ find* メソッドから Optional を返す
 Optional<Market> market = marketRepository.findBySlug(slug);
 
-// ✅ Map/flatMap instead of get()
+// ✅ get() の代わりに map/flatMap を使用
 return market
     .map(MarketResponse::from)
     .orElseThrow(() -> new EntityNotFoundException("Market not found"));
 ```
 
-## Streams Best Practices
+## ストリームベストプラクティス
 
 ```java
-// ✅ Use streams for transformations, keep pipelines short
+// ✅ 変換にはストリームを使用し、パイプラインを短く保つ
 List<String> names = markets.stream()
     .map(Market::name)
     .filter(Objects::nonNull)
     .toList();
 
-// ❌ Avoid complex nested streams; prefer loops for clarity
+// ❌ 複雑なネストされたストリームを避ける; 明確性のためにループを優先
 ```
 
-## Exceptions
+## 例外
 
-- Use unchecked exceptions for domain errors; wrap technical exceptions with context
-- Create domain-specific exceptions (e.g., `MarketNotFoundException`)
-- Avoid broad `catch (Exception ex)` unless rethrowing/logging centrally
+- ドメイン エラーには未チェック例外を使用; 技術的な例外はコンテキストでラップ
+- ドメイン固有の例外を作成 (例: `MarketNotFoundException`)
+- 広い `catch (Exception ex)` を避ける (中央で再スロー/ログしない限り)
 
 ```java
 throw new MarketNotFoundException(slug);
 ```
 
-## Generics and Type Safety
+## ジェネリクスと型安全性
 
-- Avoid raw types; declare generic parameters
-- Prefer bounded generics for reusable utilities
+- ロー型を避ける; ジェネリック パラメータを宣言
+- 再利用可能なユーティリティに対して、境界付きジェネリックスを優先
 
 ```java
 public <T extends Identifiable> Map<Long, T> indexById(Collection<T> items) { ... }
 ```
 
-## Project Structure (Maven/Gradle)
+## プロジェクト構造 (Maven/Gradle)
 
 ```
 src/main/java/com/example/app/
@@ -98,25 +98,25 @@ src/main/java/com/example/app/
   util/
 src/main/resources/
   application.yml
-src/test/java/... (mirrors main)
+src/test/java/... (main をミラー)
 ```
 
-## Formatting and Style
+## フォーマットとスタイル
 
-- Use 2 or 4 spaces consistently (project standard)
-- One public top-level type per file
-- Keep methods short and focused; extract helpers
-- Order members: constants, fields, constructors, public methods, protected, private
+- 一貫して 2 または 4 スペースを使用 (プロジェクト標準)
+- 1 つのパブリック トップレベル型を 1 ファイルに
+- メソッドを短く、フォーカスされたままに保つ; ヘルパーを抽出
+- メンバー順: 定数、フィールド、コンストラクター、パブリック メソッド、protected、private
 
-## Code Smells to Avoid
+## 避けるべきコードのニオイ
 
-- Long parameter lists → use DTO/builders
-- Deep nesting → early returns
-- Magic numbers → named constants
-- Static mutable state → prefer dependency injection
-- Silent catch blocks → log and act or rethrow
+- 長いパラメーター リスト → DTO/ビルダーを使用
+- 深いネスト → 早期リターン
+- マジック ナンバー → 名前付き定数
+- 静的な可変状態 → 依存性の注入を優先
+- サイレント catch ブロック → ログして実行するか、再スロー
 
-## Logging
+## ログ
 
 ```java
 private static final Logger log = LoggerFactory.getLogger(MarketService.class);
@@ -124,15 +124,15 @@ log.info("fetch_market slug={}", slug);
 log.error("failed_fetch_market slug={}", slug, ex);
 ```
 
-## Null Handling
+## null 処理
 
-- Accept `@Nullable` only when unavoidable; otherwise use `@NonNull`
-- Use Bean Validation (`@NotNull`, `@NotBlank`) on inputs
+- `@Nullable` は避けられない場合にのみ受け入れる; そうでない場合は `@NonNull` を使用
+- 入力では Bean Validation (`@NotNull`, `@NotBlank`) を使用
 
-## Testing Expectations
+## テストの期待
 
 - JUnit 5 + AssertJ for fluent assertions
-- Mockito for mocking; avoid partial mocks where possible
-- Favor deterministic tests; no hidden sleeps
+- モック用に Mockito を使用; 可能な限り partial mocks を避ける
+- 非決定論的テストを優先; 隠された sleeps はなし
 
-**Remember**: Keep code intentional, typed, and observable. Optimize for maintainability over micro-optimizations unless proven necessary.
+**注意**: コードを意図的、型付き、観察可能なままに保ちます。必要性が証明されない限り、マイクロ最適化より保守性を優先します。

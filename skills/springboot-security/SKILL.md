@@ -1,17 +1,17 @@
 ---
 name: springboot-security
-description: Spring Security best practices for authn/authz, validation, CSRF, secrets, headers, rate limiting, and dependency security in Java Spring Boot services.
+description: Spring Securityベストプラクティス。認証/認可、検証、CSRF、シークレット、ヘッダー、レート制限、依存関係セキュリティ。JavaSpring Bootサービス用。
 ---
 
-# Spring Boot Security Review
+# Spring Bootセキュリティレビュー
 
-Use when adding auth, handling input, creating endpoints, or dealing with secrets.
+認証追加、入力処理、エンドポイント作成、またはシークレット処理時に使用。
 
-## Authentication
+## 認証
 
-- Prefer stateless JWT or opaque tokens with revocation list
-- Use `httpOnly`, `Secure`, `SameSite=Strict` cookies for sessions
-- Validate tokens with `OncePerRequestFilter` or resource server
+- ステートレスJWTまたは失効リスト付き不透明トークンを優先
+- セッション用に`httpOnly`、`Secure`、`SameSite=Strict`クッキーを使用
+- `OncePerRequestFilter`またはリソースサーバーでトークンを検証
 
 ```java
 @Component
@@ -36,27 +36,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 }
 ```
 
-## Authorization
+## 認可
 
-- Enable method security: `@EnableMethodSecurity`
-- Use `@PreAuthorize("hasRole('ADMIN')")` or `@PreAuthorize("@authz.canEdit(#id)")`
-- Deny by default; expose only required scopes
+- メソッドセキュリティを有効化：`@EnableMethodSecurity`
+- `@PreAuthorize("hasRole('ADMIN')")`または`@PreAuthorize("@authz.canEdit(#id)")`を使用
+- デフォルトで拒否、必須スコープのみを露出
 
-## Input Validation
+## 入力検証
 
-- Use Bean Validation with `@Valid` on controllers
-- Apply constraints on DTOs: `@NotBlank`, `@Email`, `@Size`, custom validators
-- Sanitize any HTML with a whitelist before rendering
+- コントローラーで`@Valid`を使用してBean検証を適用
+- DTO上の制約を適用：`@NotBlank`、`@Email`、`@Size`、カスタム検証
+- レンダリング前にHTMLをホワイトリストでサニタイズ
 
-## SQL Injection Prevention
+## SQLインジェクション防止
 
-- Use Spring Data repositories or parameterized queries
-- For native queries, use `:param` bindings; never concatenate strings
+- Spring Dataリポジトリまたはパラメータ化クエリを使用
+- ネイティブクエリの場合、`:param`バインディングを使用、文字列連結なし
 
-## CSRF Protection
+## CSRF保護
 
-- For browser session apps, keep CSRF enabled; include token in forms/headers
-- For pure APIs with Bearer tokens, disable CSRF and rely on stateless auth
+- ブラウザセッションアプリの場合、CSRFを有効に保つ、トークンをフォーム/ヘッダーに含める
+- Bearerトークン付き純粋APIの場合、CSRFを無効にしてステートレス認証に依存
 
 ```java
 http
@@ -64,13 +64,13 @@ http
   .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 ```
 
-## Secrets Management
+## シークレット管理
 
-- No secrets in source; load from env or vault
-- Keep `application.yml` free of credentials; use placeholders
-- Rotate tokens and DB credentials regularly
+- ソースにシークレットなし、環境またはvaultから読み込み
+- `application.yml`を認証情報から保ち、プレースホルダーを使用
+- トークンとDB認証情報を定期的にローテーション
 
-## Security Headers
+## セキュリティヘッダー
 
 ```java
 http
@@ -82,38 +82,38 @@ http
     .referrerPolicy(rp -> rp.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)));
 ```
 
-## Rate Limiting
+## レート制限
 
-- Apply Bucket4j or gateway-level limits on expensive endpoints
-- Log and alert on bursts; return 429 with retry hints
+- 高コストエンドポイントでBucket4jまたはゲートウェイレベルの制限を適用
+- バースト時にログとアラート、429とリトライヒントを返す
 
-## Dependency Security
+## 依存関係セキュリティ
 
-- Run OWASP Dependency Check / Snyk in CI
-- Keep Spring Boot and Spring Security on supported versions
-- Fail builds on known CVEs
+- CI内でOWASP Dependency Check / SnyKを実行
+- Spring BootおよびSpring Securityをサポート対象バージョンに保つ
+- 既知のCVEでビルドを失敗させる
 
-## Logging and PII
+## ログとPII
 
-- Never log secrets, tokens, passwords, or full PAN data
-- Redact sensitive fields; use structured JSON logging
+- シークレット、トークン、パスワード、または完全なPANデータをログ出力しない
+- 機密フィールドをマスク、構造化JSONログを使用
 
-## File Uploads
+## ファイルアップロード
 
-- Validate size, content type, and extension
-- Store outside web root; scan if required
+- サイズ、コンテンツタイプ、拡張子を検証
+- Webルート外に保存、必要に応じてスキャン
 
-## Checklist Before Release
+## リリース前チェックリスト
 
-- [ ] Auth tokens validated and expired correctly
-- [ ] Authorization guards on every sensitive path
-- [ ] All inputs validated and sanitized
-- [ ] No string-concatenated SQL
-- [ ] CSRF posture correct for app type
-- [ ] Secrets externalized; none committed
-- [ ] Security headers configured
-- [ ] Rate limiting on APIs
-- [ ] Dependencies scanned and up to date
-- [ ] Logs free of sensitive data
+- [ ] 認証トークンが正しく検証・失効
+- [ ] すべての機密パスで認可ガード
+- [ ] すべての入力が検証・サニタイズ
+- [ ] 文字列連結SQLなし
+- [ ] アプリタイプに対するCSF体制が正解
+- [ ] シークレットが外部化、コミットなし
+- [ ] セキュリティヘッダー設定済み
+- [ ] APIにレート制限
+- [ ] 依存関係スキャン済み、最新
+- [ ] ログに機密データなし
 
-**Remember**: Deny by default, validate inputs, least privilege, and secure-by-configuration first.
+**覚えておいてください**：デフォルトで拒否、入力を検証、最小権限、設定優先でセキュアにしてください。
