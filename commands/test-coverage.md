@@ -1,27 +1,27 @@
-# Test Coverage
+# テストカバレッジ
 
-Analyze test coverage and generate missing tests:
+テストカバレッジを分析して不足しているテストを生成:
 
-1. Run tests with coverage: npm test --coverage or pnpm test --coverage
+1. カバレッジでテストを実行: npm test --coverage または pnpm test --coverage
 
-2. Analyze coverage report (coverage/coverage-summary.json)
+2. カバレッジレポートを分析 (coverage/coverage-summary.json)
 
-3. Identify files below 80% coverage threshold
+3. 80% カバレッジ閾値以下のファイルを特定
 
-4. For each under-covered file:
-   - Analyze untested code paths
-   - Generate unit tests for functions
-   - Generate integration tests for APIs
-   - Generate E2E tests for critical flows
+4. カバレッジが不足している各ファイルについて:
+   - テストされていないコードパスを分析
+   - 関数のユニットテストを生成
+   - API の統合テストを生成
+   - 重要なフローのE2E テストを生成
 
-5. Verify new tests pass
+5. 新しいテストが成功することを確認
 
-6. Show before/after coverage metrics
+6. カバレッジメトリクスの前後を表示
 
-7. Ensure project reaches 80%+ overall coverage
+7. プロジェクトが 80%+ 全体カバレッジに達することを確認
 
-Focus on:
-- Happy path scenarios
-- Error handling
-- Edge cases (null, undefined, empty)
-- Boundary conditions
+焦点を当てる:
+- ハッピーパスシナリオ
+- エラーハンドリング
+- エッジケース (null、undefined、empty)
+- 境界条件

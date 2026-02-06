@@ -1,32 +1,32 @@
-# PM2 Init
+# PM2 初期化
 
-Auto-analyze project and generate PM2 service commands.
+プロジェクトを自動分析して PM2 サービスコマンドを生成します。
 
-**Command**: `$ARGUMENTS`
-
----
-
-## Workflow
-
-1. Check PM2 (install via `npm install -g pm2` if missing)
-2. Scan project to identify services (frontend/backend/database)
-3. Generate config files and individual command files
+**コマンド**: `$ARGUMENTS`
 
 ---
 
-## Service Detection
+## ワークフロー
 
-| Type | Detection | Default Port |
+1. PM2 をチェック (不足している場合は `npm install -g pm2` でインストール)
+2. プロジェクトをスキャンしてサービスを特定 (フロントエンド/バックエンド/データベース)
+3. 設定ファイルと個別のコマンドファイルを生成
+
+---
+
+## サービス検出
+
+| タイプ | 検出 | デフォルトポート |
 |------|-----------|--------------|
 | Vite | vite.config.* | 5173 |
 | Next.js | next.config.* | 3000 |
 | Nuxt | nuxt.config.* | 3000 |
 | CRA | react-scripts in package.json | 3000 |
-| Express/Node | server/backend/api directory + package.json | 3000 |
+| Express/Node | server/backend/api ディレクトリ + package.json | 3000 |
 | FastAPI/Flask | requirements.txt / pyproject.toml | 8000 |
 | Go | go.mod / main.go | 8080 |
 
-**Port Detection Priority**: User specified > .env > config file > scripts args > default port
+**ポート検出の優先度**: ユーザー指定 > .env > 設定ファイル > スクリプト引数 > デフォルトポート
 
 ---
 
@@ -195,23 +195,23 @@ pm2 monit
 
 ---
 
-## Execute
+## 実行
 
-Based on `$ARGUMENTS`, execute init:
+`$ARGUMENTS` に基づいて、初期化を実行:
 
-1. Scan project for services
-2. Generate `ecosystem.config.cjs`
-3. Generate `{backend}/start.cjs` for Python services (if applicable)
-4. Generate command files in `.claude/commands/`
-5. Generate script files in `.claude/scripts/`
-6. **Update project CLAUDE.md** with PM2 info (see below)
-7. **Display completion summary** with terminal commands
+1. プロジェクトをスキャンしてサービスを検出
+2. `ecosystem.config.cjs` を生成
+3. Python サービス用に `{backend}/start.cjs` を生成 (該当する場合)
+4. `.claude/commands/` にコマンドファイルを生成
+5. `.claude/scripts/` にスクリプトファイルを生成
+6. **プロジェクト CLAUDE.md を更新** PM2 情報で (下記を参照)
+7. **完了サマリーを表示** ターミナルコマンド付き
 
 ---
 
-## Post-Init: Update CLAUDE.md
+## 初期化後: CLAUDE.md を更新
 
-After generating files, append PM2 section to project's `CLAUDE.md` (create if not exists):
+ファイル生成後、プロジェクトの `CLAUDE.md` に PM2 セクションを追加 (存在しない場合は作成):
 
 ```markdown
 ## PM2 Services
@@ -232,16 +232,16 @@ pm2 resurrect                    # Restore saved list
 ```
 ```
 
-**Rules for CLAUDE.md update:**
-- If PM2 section exists, replace it
-- If not exists, append to end
-- Keep content minimal and essential
+**CLAUDE.md 更新ルール:**
+- PM2 セクションが存在する場合は置き換え
+- 存在しない場合は末尾に追加
+- コンテンツは最小限で本質的に保つ
 
 ---
 
-## Post-Init: Display Summary
+## 初期化後: サマリーを表示
 
-After all files generated, output:
+すべてのファイルが生成された後、出力:
 
 ```
 ## PM2 Init Complete

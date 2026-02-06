@@ -1,104 +1,104 @@
-# Execute - Multi-Model Collaborative Execution
+# 実行 - マルチモデル協力実行
 
-Multi-model collaborative execution - Get prototype from plan → Claude refactors and implements → Multi-model audit and delivery.
+マルチモデル協力実行 - プランからプロトタイプを取得 → Claude がリファクタリングして実装 → マルチモデル監査と配信。
 
 $ARGUMENTS
 
 ---
 
-## Core Protocols
+## コアプロトコル
 
-- **Language Protocol**: Use **English** when interacting with tools/models, communicate with user in their language
-- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by Claude
-- **Dirty Prototype Refactoring**: Treat Codex/Gemini Unified Diff as "dirty prototype", must refactor to production-grade code
-- **Stop-Loss Mechanism**: Do not proceed to next phase until current phase output is validated
-- **Prerequisite**: Only execute after user explicitly replies "Y" to `/ccg:plan` output (if missing, must confirm first)
+- **言語プロトコル**: ツール/モデルと相互作用するときは **英語** を使用し、ユーザーとは彼らの言語でコミュニケーション
+- **コード主権**: 外部モデルは **ゼロのファイルシステム書き込みアクセス** を持つ、すべての変更は Claude
+- **ダーティプロトタイプリファクタリング**: Codex/Gemini 統一Diff を「ダーティプロトタイプ」として扱う、本番品質のコードにリファクタリング必須
+- **ロスカットメカニズム**: 現在のフェーズ出力が検証されるまで次のフェーズに進まない
+- **前提条件**: ユーザーが `/ccg:plan` 出力に明示的に「Y」で返信した後のみ実行 (不足している場合、まず確認する必要があります)
 
 ---
 
-## Multi-Model Call Specification
+## マルチモデル呼び出し仕様
 
-**Call Syntax** (parallel: use `run_in_background: true`):
+**呼び出し構文** (並列: `run_in_background: true` を使用):
 
 ```
-# Resume session call (recommended) - Implementation Prototype
+# セッション再開呼び出し (推奨) - 実装プロトタイプ
 Bash({
   command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <role prompt path>
+ROLE_FILE: <ロールプロンプトパス>
 <TASK>
-Requirement: <task description>
-Context: <plan content + target files>
+要件: <タスク説明>
+コンテキスト: <プラン内容 + ターゲットファイル>
 </TASK>
-OUTPUT: Unified Diff Patch ONLY. Strictly prohibit any actual modifications.
+OUTPUT: 統一 Diff パッチのみ。実際の変更を厳密に禁止します。
 EOF",
   run_in_background: true,
   timeout: 3600000,
-  description: "Brief description"
+  description: "簡潔な説明"
 })
 
-# New session call - Implementation Prototype
+# 新規セッション呼び出し - 実装プロトタイプ
 Bash({
   command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}- \"$PWD\" <<'EOF'
-ROLE_FILE: <role prompt path>
+ROLE_FILE: <ロールプロンプトパス>
 <TASK>
-Requirement: <task description>
-Context: <plan content + target files>
+要件: <タスク説明>
+コンテキスト: <プラン内容 + ターゲットファイル>
 </TASK>
-OUTPUT: Unified Diff Patch ONLY. Strictly prohibit any actual modifications.
+OUTPUT: 統一 Diff パッチのみ。実際の変更を厳密に禁止します。
 EOF",
   run_in_background: true,
   timeout: 3600000,
-  description: "Brief description"
+  description: "簡潔な説明"
 })
 ```
 
-**Audit Call Syntax** (Code Review / Audit):
+**監査呼び出し構文** (コードレビュー / 監査):
 
 ```
 Bash({
   command: "~/.claude/bin/codeagent-wrapper {{LITE_MODE_FLAG}}--backend <codex|gemini> {{GEMINI_MODEL_FLAG}}resume <SESSION_ID> - \"$PWD\" <<'EOF'
-ROLE_FILE: <role prompt path>
+ROLE_FILE: <ロールプロンプトパス>
 <TASK>
-Scope: Audit the final code changes.
-Inputs:
-- The applied patch (git diff / final unified diff)
-- The touched files (relevant excerpts if needed)
-Constraints:
-- Do NOT modify any files.
-- Do NOT output tool commands that assume filesystem access.
+スコープ: 最終的なコード変更を監査します。
+入力:
+- 適用されたパッチ (git diff / 最終統一 diff)
+- 触れたファイル (必要に応じて関連する抜粋)
+制約:
+- ファイルを変更しないでください。
+- ファイルシステムアクセスを想定するツールコマンドを出力しないでください。
 </TASK>
 OUTPUT:
-1) A prioritized list of issues (severity, file, rationale)
-2) Concrete fixes; if code changes are needed, include a Unified Diff Patch in a fenced code block.
+1) 優先順位付きの問題リスト (重要度、ファイル、根拠)
+2) 具体的な修正。コード変更が必要な場合は、フェンス付きコードブロックに統一 Diff パッチを含めます。
 EOF",
   run_in_background: true,
   timeout: 3600000,
-  description: "Brief description"
+  description: "簡潔な説明"
 })
 ```
 
-**Model Parameter Notes**:
-- `{{GEMINI_MODEL_FLAG}}`: When using `--backend gemini`, replace with `--gemini-model gemini-3-pro-preview ` (note trailing space); use empty string for codex
+**モデルパラメーター注記**:
+- `{{GEMINI_MODEL_FLAG}}`: `--backend gemini` を使用する場合、`--gemini-model gemini-3-pro-preview ` (末尾のスペースに注意) に置き換える; codex の場合は空文字列を使用
 
-**Role Prompts**:
+**ロールプロンプト**:
 
-| Phase | Codex | Gemini |
+| フェーズ | Codex | Gemini |
 |-------|-------|--------|
-| Implementation | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/frontend.md` |
-| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
+| 実装 | `~/.claude/.ccg/prompts/codex/architect.md` | `~/.claude/.ccg/prompts/gemini/frontend.md` |
+| レビュー | `~/.claude/.ccg/prompts/codex/reviewer.md` | `~/.claude/.ccg/prompts/gemini/reviewer.md` |
 
-**Session Reuse**: If `/ccg:plan` provided SESSION_ID, use `resume <SESSION_ID>` to reuse context.
+**セッション再利用**: `/ccg:plan` が SESSION_ID を提供した場合、`resume <SESSION_ID>` を使用してコンテキストを再利用します。
 
-**Wait for Background Tasks** (max timeout 600000ms = 10 minutes):
+**バックグラウンドタスク待機** (最大タイムアウト 600000ms = 10 分):
 
 ```
 TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 ```
 
-**IMPORTANT**:
-- Must specify `timeout: 600000`, otherwise default 30 seconds will cause premature timeout
-- If still incomplete after 10 minutes, continue polling with `TaskOutput`, **NEVER kill the process**
-- If waiting is skipped due to timeout, **MUST call `AskUserQuestion` to ask user whether to continue waiting or kill task**
+**重要**:
+- `timeout: 600000` を指定する必要があります。そうでないとデフォルト 30 秒でタイムアウトが早すぎます
+- 10 分後もまだ完了しない場合、`TaskOutput` でのポーリングを続行します。**プロセスを終了しないでください**
+- タイムアウトのため待機がスキップされた場合、**ユーザーに続行するか タスクを終了するか尋ねるために `AskUserQuestion` を呼び出す必須**
 
 ---
 

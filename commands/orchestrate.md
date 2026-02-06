@@ -1,172 +1,172 @@
-# Orchestrate Command
+# オーケストレートコマンド
 
-Sequential agent workflow for complex tasks.
+複雑なタスク用の順序付きエージェントワークフロー。
 
-## Usage
+## 使用法
 
 `/orchestrate [workflow-type] [task-description]`
 
-## Workflow Types
+## ワークフロータイプ
 
 ### feature
-Full feature implementation workflow:
+完全な機能実装ワークフロー:
 ```
 planner -> tdd-guide -> code-reviewer -> security-reviewer
 ```
 
 ### bugfix
-Bug investigation and fix workflow:
+バグ調査と修正ワークフロー:
 ```
 explorer -> tdd-guide -> code-reviewer
 ```
 
 ### refactor
-Safe refactoring workflow:
+安全なリファクタリングワークフロー:
 ```
 architect -> code-reviewer -> tdd-guide
 ```
 
 ### security
-Security-focused review:
+セキュリティ中心のレビュー:
 ```
 security-reviewer -> code-reviewer -> architect
 ```
 
-## Execution Pattern
+## 実行パターン
 
-For each agent in the workflow:
+ワークフロー内の各エージェントについて:
 
-1. **Invoke agent** with context from previous agent
-2. **Collect output** as structured handoff document
-3. **Pass to next agent** in chain
-4. **Aggregate results** into final report
+1. **エージェントを呼び出す** 前のエージェントからのコンテキスト付きで
+2. **出力を収集** 構造化されたハンドオフドキュメントとして
+3. **次のエージェントに渡す** チェーン内で
+4. **結果を集約** 最終レポートに
 
-## Handoff Document Format
+## ハンドオフドキュメント形式
 
-Between agents, create handoff document:
+エージェント間でハンドオフドキュメントを作成:
 
 ```markdown
-## HANDOFF: [previous-agent] -> [next-agent]
+## ハンドオフ: [前のエージェント] -> [次のエージェント]
 
-### Context
-[Summary of what was done]
+### コンテキスト
+[何が行われたかの概要]
 
-### Findings
-[Key discoveries or decisions]
+### 発見事項
+[主要な発見または決定事項]
 
-### Files Modified
-[List of files touched]
+### 変更されたファイル
+[触れたファイルのリスト]
 
-### Open Questions
-[Unresolved items for next agent]
+### 未解決の質問
+[次のエージェント向けの未解決項目]
 
-### Recommendations
-[Suggested next steps]
+### 推奨事項
+[提案された次のステップ]
 ```
 
-## Example: Feature Workflow
+## 例: 機能ワークフロー
 
 ```
-/orchestrate feature "Add user authentication"
+/orchestrate feature "ユーザー認証を追加"
 ```
 
-Executes:
+実行:
 
-1. **Planner Agent**
-   - Analyzes requirements
-   - Creates implementation plan
-   - Identifies dependencies
-   - Output: `HANDOFF: planner -> tdd-guide`
+1. **プランナーエージェント**
+   - 要件を分析
+   - 実装計画を作成
+   - 依存性を特定
+   - 出力: `ハンドオフ: planner -> tdd-guide`
 
-2. **TDD Guide Agent**
-   - Reads planner handoff
-   - Writes tests first
-   - Implements to pass tests
-   - Output: `HANDOFF: tdd-guide -> code-reviewer`
+2. **TDD ガイドエージェント**
+   - プランナーハンドオフを読む
+   - テストを最初に書く
+   - テストに合わせて実装
+   - 出力: `ハンドオフ: tdd-guide -> code-reviewer`
 
-3. **Code Reviewer Agent**
-   - Reviews implementation
-   - Checks for issues
-   - Suggests improvements
-   - Output: `HANDOFF: code-reviewer -> security-reviewer`
+3. **コードレビューエージェント**
+   - 実装をレビュー
+   - 問題をチェック
+   - 改善を提案
+   - 出力: `ハンドオフ: code-reviewer -> security-reviewer`
 
-4. **Security Reviewer Agent**
-   - Security audit
-   - Vulnerability check
-   - Final approval
-   - Output: Final Report
+4. **セキュリティレビューエージェント**
+   - セキュリティ監査
+   - 脆弱性チェック
+   - 最終的な承認
+   - 出力: 最終レポート
 
-## Final Report Format
+## 最終レポート形式
 
 ```
-ORCHESTRATION REPORT
+オーケストレーションレポート
 ====================
-Workflow: feature
-Task: Add user authentication
-Agents: planner -> tdd-guide -> code-reviewer -> security-reviewer
+ワークフロー: feature
+タスク: ユーザー認証を追加
+エージェント: planner -> tdd-guide -> code-reviewer -> security-reviewer
 
-SUMMARY
+サマリー
 -------
-[One paragraph summary]
+[1 段落のサマリー]
 
-AGENT OUTPUTS
+エージェント出力
 -------------
-Planner: [summary]
-TDD Guide: [summary]
-Code Reviewer: [summary]
-Security Reviewer: [summary]
+Planner: [サマリー]
+TDD ガイド: [サマリー]
+コードレビュー: [サマリー]
+セキュリティレビュー: [サマリー]
 
-FILES CHANGED
+ファイル変更
 -------------
-[List all files modified]
+[変更されたすべてのファイルをリスト]
 
-TEST RESULTS
+テスト結果
 ------------
-[Test pass/fail summary]
+[テスト成功/失敗サマリー]
 
-SECURITY STATUS
+セキュリティステータス
 ---------------
-[Security findings]
+[セキュリティ発見事項]
 
-RECOMMENDATION
+推奨事項
 --------------
-[SHIP / NEEDS WORK / BLOCKED]
+[リリース / 作業が必要 / ブロック済み]
 ```
 
-## Parallel Execution
+## 並列実行
 
-For independent checks, run agents in parallel:
+独立したチェックの場合、エージェントを並列で実行:
 
 ```markdown
-### Parallel Phase
-Run simultaneously:
-- code-reviewer (quality)
-- security-reviewer (security)
-- architect (design)
+### 並列フェーズ
+同時に実行:
+- code-reviewer (品質)
+- security-reviewer (セキュリティ)
+- architect (設計)
 
-### Merge Results
-Combine outputs into single report
+### 結果をマージ
+出力を単一のレポートに結合
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `feature <description>` - Full feature workflow
-- `bugfix <description>` - Bug fix workflow
-- `refactor <description>` - Refactoring workflow
-- `security <description>` - Security review workflow
-- `custom <agents> <description>` - Custom agent sequence
+- `feature <description>` - 完全な機能ワークフロー
+- `bugfix <description>` - バグ修正ワークフロー
+- `refactor <description>` - リファクタリングワークフロー
+- `security <description>` - セキュリティレビューワークフロー
+- `custom <agents> <description>` - カスタムエージェントシーケンス
 
-## Custom Workflow Example
+## カスタムワークフロー例
 
 ```
-/orchestrate custom "architect,tdd-guide,code-reviewer" "Redesign caching layer"
+/orchestrate custom "architect,tdd-guide,code-reviewer" "キャッシングレイヤーを再設計"
 ```
 
-## Tips
+## ヒント
 
-1. **Start with planner** for complex features
-2. **Always include code-reviewer** before merge
-3. **Use security-reviewer** for auth/payment/PII
-4. **Keep handoffs concise** - focus on what next agent needs
-5. **Run verification** between agents if needed
+1. **複雑な機能の場合はプランナーで開始**
+2. **マージ前には常にコードレビューを含める**
+3. **認証/支払い/個人情報にはセキュリティレビューを使用**
+4. **ハンドオフは簡潔に** - 次のエージェントが必要なことに焦点を当てる
+5. **必要に応じてエージェント間で検証を実行**

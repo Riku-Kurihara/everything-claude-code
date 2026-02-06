@@ -1,74 +1,74 @@
-# Checkpoint Command
+# チェックポイントコマンド
 
-Create or verify a checkpoint in your workflow.
+ワークフロー内にチェックポイントを作成または検証します。
 
-## Usage
+## 使用法
 
 `/checkpoint [create|verify|list] [name]`
 
-## Create Checkpoint
+## チェックポイントの作成
 
-When creating a checkpoint:
+チェックポイントを作成するとき:
 
-1. Run `/verify quick` to ensure current state is clean
-2. Create a git stash or commit with checkpoint name
-3. Log checkpoint to `.claude/checkpoints.log`:
+1. `/verify quick` を実行して現在の状態がクリーンであることを確認
+2. チェックポイント名でgitスタッシュまたはコミットを作成
+3. `.claude/checkpoints.log` にチェックポイントを記録:
 
 ```bash
 echo "$(date +%Y-%m-%d-%H:%M) | $CHECKPOINT_NAME | $(git rev-parse --short HEAD)" >> .claude/checkpoints.log
 ```
 
-4. Report checkpoint created
+4. チェックポイント作成を報告
 
-## Verify Checkpoint
+## チェックポイントの検証
 
-When verifying against a checkpoint:
+チェックポイントに対して検証するとき:
 
-1. Read checkpoint from log
-2. Compare current state to checkpoint:
-   - Files added since checkpoint
-   - Files modified since checkpoint
-   - Test pass rate now vs then
-   - Coverage now vs then
+1. ログからチェックポイントを読み込む
+2. 現在の状態をチェックポイントと比較:
+   - チェックポイント以降に追加されたファイル
+   - チェックポイント以降に変更されたファイル
+   - テスト成功率 (現在と過去)
+   - カバレッジ (現在と過去)
 
-3. Report:
+3. 報告:
 ```
-CHECKPOINT COMPARISON: $NAME
+チェックポイント比較: $NAME
 ============================
-Files changed: X
-Tests: +Y passed / -Z failed
-Coverage: +X% / -Y%
-Build: [PASS/FAIL]
+ファイル変更数: X
+テスト: +Y 成功 / -Z 失敗
+カバレッジ: +X% / -Y%
+ビルド: [成功/失敗]
 ```
 
-## List Checkpoints
+## チェックポイント一覧
 
-Show all checkpoints with:
-- Name
-- Timestamp
+すべてのチェックポイントを表示:
+- 名前
+- タイムスタンプ
 - Git SHA
-- Status (current, behind, ahead)
+- ステータス (現在, 背後, 前方)
 
-## Workflow
+## ワークフロー
 
-Typical checkpoint flow:
+典型的なチェックポイントフロー:
 
 ```
-[Start] --> /checkpoint create "feature-start"
+[開始] --> /checkpoint create "feature-start"
    |
-[Implement] --> /checkpoint create "core-done"
+[実装] --> /checkpoint create "core-done"
    |
-[Test] --> /checkpoint verify "core-done"
+[テスト] --> /checkpoint verify "core-done"
    |
-[Refactor] --> /checkpoint create "refactor-done"
+[リファクタ] --> /checkpoint create "refactor-done"
    |
 [PR] --> /checkpoint verify "feature-start"
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `create <name>` - Create named checkpoint
-- `verify <name>` - Verify against named checkpoint
-- `list` - Show all checkpoints
-- `clear` - Remove old checkpoints (keeps last 5)
+- `create <name>` - 名前付きチェックポイントを作成
+- `verify <name>` - 名前付きチェックポイントに対して検証
+- `list` - すべてのチェックポイントを表示
+- `clear` - 古いチェックポイントを削除 (最後の5つを保持)

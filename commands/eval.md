@@ -1,120 +1,120 @@
-# Eval Command
+# Evalコマンド
 
-Manage eval-driven development workflow.
+Eval駆動開発ワークフローを管理します。
 
-## Usage
+## 使用法
 
 `/eval [define|check|report|list] [feature-name]`
 
-## Define Evals
+## Evalの定義
 
 `/eval define feature-name`
 
-Create a new eval definition:
+新しいeval定義を作成:
 
-1. Create `.claude/evals/feature-name.md` with template:
+1. テンプレート付きで `.claude/evals/feature-name.md` を作成:
 
 ```markdown
 ## EVAL: feature-name
-Created: $(date)
+作成日時: $(date)
 
-### Capability Evals
-- [ ] [Description of capability 1]
-- [ ] [Description of capability 2]
+### 機能Eval
+- [ ] [機能1の説明]
+- [ ] [機能2の説明]
 
-### Regression Evals
-- [ ] [Existing behavior 1 still works]
-- [ ] [Existing behavior 2 still works]
+### リグレッションEval
+- [ ] [既存の動作1がまだ機能しています]
+- [ ] [既存の動作2がまだ機能しています]
 
-### Success Criteria
-- pass@3 > 90% for capability evals
-- pass^3 = 100% for regression evals
+### 成功基準
+- 機能Evalで pass@3 > 90%
+- リグレッションEvalで pass^3 = 100%
 ```
 
-2. Prompt user to fill in specific criteria
+2. ユーザーに具体的な基準を入力するようプロンプト
 
-## Check Evals
+## Evalの確認
 
 `/eval check feature-name`
 
-Run evals for a feature:
+機能のevalを実行:
 
-1. Read eval definition from `.claude/evals/feature-name.md`
-2. For each capability eval:
-   - Attempt to verify criterion
-   - Record PASS/FAIL
-   - Log attempt in `.claude/evals/feature-name.log`
-3. For each regression eval:
-   - Run relevant tests
-   - Compare against baseline
-   - Record PASS/FAIL
-4. Report current status:
+1. `.claude/evals/feature-name.md` からeval定義を読み込む
+2. 各機能Evalについて:
+   - 基準の確認を試みる
+   - PASS/FAILを記録
+   - `.claude/evals/feature-name.log` に試行をログ
+3. 各リグレッションEvalについて:
+   - 関連するテストを実行
+   - ベースラインと比較
+   - PASS/FAILを記録
+4. 現在のステータスを報告:
 
 ```
-EVAL CHECK: feature-name
+EVAL チェック: feature-name
 ========================
-Capability: X/Y passing
-Regression: X/Y passing
-Status: IN PROGRESS / READY
+機能: X/Y 成功
+リグレッション: X/Y 成功
+ステータス: 進行中 / 準備完了
 ```
 
-## Report Evals
+## Evalレポート
 
 `/eval report feature-name`
 
-Generate comprehensive eval report:
+包括的なevalレポートを生成:
 
 ```
-EVAL REPORT: feature-name
+EVALレポート: feature-name
 =========================
-Generated: $(date)
+生成日時: $(date)
 
-CAPABILITY EVALS
-----------------
-[eval-1]: PASS (pass@1)
-[eval-2]: PASS (pass@2) - required retry
-[eval-3]: FAIL - see notes
+機能EVAL
+--------
+[eval-1]: 成功 (pass@1)
+[eval-2]: 成功 (pass@2) - 再試行が必要
+[eval-3]: 失敗 - 注記を参照
 
-REGRESSION EVALS
-----------------
-[test-1]: PASS
-[test-2]: PASS
-[test-3]: PASS
+リグレッションEVAL
+------------------
+[test-1]: 成功
+[test-2]: 成功
+[test-3]: 成功
 
-METRICS
+メトリクス
+---------
+機能 pass@1: 67%
+機能 pass@3: 100%
+リグレッション pass^3: 100%
+
+注記
+----
+[問題、エッジケース、または観察事項]
+
+推奨事項
 -------
-Capability pass@1: 67%
-Capability pass@3: 100%
-Regression pass^3: 100%
-
-NOTES
------
-[Any issues, edge cases, or observations]
-
-RECOMMENDATION
---------------
-[SHIP / NEEDS WORK / BLOCKED]
+[リリース / 作業が必要 / ブロック済み]
 ```
 
-## List Evals
+## Evalの一覧表示
 
 `/eval list`
 
-Show all eval definitions:
+すべてのeval定義を表示:
 
 ```
-EVAL DEFINITIONS
+EVAL定義
 ================
-feature-auth      [3/5 passing] IN PROGRESS
-feature-search    [5/5 passing] READY
-feature-export    [0/4 passing] NOT STARTED
+feature-auth      [3/5 成功] 進行中
+feature-search    [5/5 成功] 準備完了
+feature-export    [0/4 成功] 未開始
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `define <name>` - Create new eval definition
-- `check <name>` - Run and check evals
-- `report <name>` - Generate full report
-- `list` - Show all evals
-- `clean` - Remove old eval logs (keeps last 10 runs)
+- `define <name>` - 新しいeval定義を作成
+- `check <name>` - Evalを実行して確認
+- `report <name>` - 完全なレポートを生成
+- `list` - すべてのevalを表示
+- `clean` - 古いevalログを削除 (最後の10回を保持)

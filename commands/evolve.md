@@ -1,148 +1,148 @@
 ---
 name: evolve
-description: Cluster related instincts into skills, commands, or agents
+description: 関連するインスティンクトをスキル、コマンド、またはエージェントにクラスタリングします
 command: true
 ---
 
-# Evolve Command
+# Evolveコマンド
 
-## Implementation
+## 実装
 
-Run the instinct CLI using the plugin root path:
+プラグインルートパスを使用してインスティンクトCLIを実行:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" evolve [--generate]
 ```
 
-Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
+または `CLAUDE_PLUGIN_ROOT` が設定されていない場合 (手動インストール):
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py evolve [--generate]
 ```
 
-Analyzes instincts and clusters related ones into higher-level structures:
-- **Commands**: When instincts describe user-invoked actions
-- **Skills**: When instincts describe auto-triggered behaviors
-- **Agents**: When instincts describe complex, multi-step processes
+インスティンクトを分析し、関連するものをより高いレベルの構造にクラスタリング:
+- **コマンド**: ユーザーが呼び出すアクションを記述するインスティンクト
+- **スキル**: 自動トリガーされた動作を記述するインスティンクト
+- **エージェント**: 複雑で複数ステップのプロセスを記述するインスティンクト
 
-## Usage
-
-```
-/evolve                    # Analyze all instincts and suggest evolutions
-/evolve --domain testing   # Only evolve instincts in testing domain
-/evolve --dry-run          # Show what would be created without creating
-/evolve --threshold 5      # Require 5+ related instincts to cluster
-```
-
-## Evolution Rules
-
-### → Command (User-Invoked)
-When instincts describe actions a user would explicitly request:
-- Multiple instincts about "when user asks to..."
-- Instincts with triggers like "when creating a new X"
-- Instincts that follow a repeatable sequence
-
-Example:
-- `new-table-step1`: "when adding a database table, create migration"
-- `new-table-step2`: "when adding a database table, update schema"
-- `new-table-step3`: "when adding a database table, regenerate types"
-
-→ Creates: `/new-table` command
-
-### → Skill (Auto-Triggered)
-When instincts describe behaviors that should happen automatically:
-- Pattern-matching triggers
-- Error handling responses
-- Code style enforcement
-
-Example:
-- `prefer-functional`: "when writing functions, prefer functional style"
-- `use-immutable`: "when modifying state, use immutable patterns"
-- `avoid-classes`: "when designing modules, avoid class-based design"
-
-→ Creates: `functional-patterns` skill
-
-### → Agent (Needs Depth/Isolation)
-When instincts describe complex, multi-step processes that benefit from isolation:
-- Debugging workflows
-- Refactoring sequences
-- Research tasks
-
-Example:
-- `debug-step1`: "when debugging, first check logs"
-- `debug-step2`: "when debugging, isolate the failing component"
-- `debug-step3`: "when debugging, create minimal reproduction"
-- `debug-step4`: "when debugging, verify fix with test"
-
-→ Creates: `debugger` agent
-
-## What to Do
-
-1. Read all instincts from `~/.claude/homunculus/instincts/`
-2. Group instincts by:
-   - Domain similarity
-   - Trigger pattern overlap
-   - Action sequence relationship
-3. For each cluster of 3+ related instincts:
-   - Determine evolution type (command/skill/agent)
-   - Generate the appropriate file
-   - Save to `~/.claude/homunculus/evolved/{commands,skills,agents}/`
-4. Link evolved structure back to source instincts
-
-## Output Format
+## 使用法
 
 ```
-🧬 Evolve Analysis
+/evolve                    # すべてのインスティンクトを分析して進化を提案
+/evolve --domain testing   # テストドメイン内のインスティンクトのみ進化
+/evolve --dry-run          # 作成せずに作成されるものを表示
+/evolve --threshold 5      # クラスタリングに5つ以上の関連インスティンクトが必要
+```
+
+## 進化ルール
+
+### → コマンド (ユーザー呼び出し)
+ユーザーが明示的にリクエストするアクションを記述するインスティンクト:
+- 「ユーザーが...するよう要求したとき」についての複数のインスティンクト
+- 「新しいXを作成するとき」のようなトリガーを持つインスティンクト
+- 繰り返し可能なシーケンスに従うインスティンクト
+
+例:
+- `new-table-step1`: 「データベーステーブルを追加するとき、マイグレーションを作成」
+- `new-table-step2`: 「データベーステーブルを追加するとき、スキーマを更新」
+- `new-table-step3`: 「データベーステーブルを追加するとき、タイプを再生成」
+
+→ 作成: `/new-table` コマンド
+
+### → スキル (自動トリガー)
+自動的に発生すべき動作を記述するインスティンクト:
+- パターンマッチングトリガー
+- エラーハンドリング応答
+- コードスタイル強制
+
+例:
+- `prefer-functional`: 「関数を書くとき、関数型スタイルを優先」
+- `use-immutable`: 「状態を変更するとき、イミュータブルパターンを使用」
+- `avoid-classes`: 「モジュールを設計するとき、クラスベースの設計を避ける」
+
+→ 作成: `functional-patterns` スキル
+
+### → エージェント (深さ/隔離が必要)
+隔離から恩恵を受ける複雑で複数ステップのプロセスを記述するインスティンクト:
+- デバッグワークフロー
+- リファクタリング手順
+- リサーチタスク
+
+例:
+- `debug-step1`: 「デバッグするとき、まずログをチェック」
+- `debug-step2`: 「デバッグするとき、失敗するコンポーネントを隔離」
+- `debug-step3`: 「デバッグするとき、最小限の再現を作成」
+- `debug-step4`: 「デバッグするとき、テストで修正を検証」
+
+→ 作成: `debugger` エージェント
+
+## やること
+
+1. `~/.claude/homunculus/instincts/` からすべてのインスティンクトを読み込む
+2. インスティンクトを以下でグループ化:
+   - ドメインの類似性
+   - トリガーパターンの重複
+   - アクションシーケンスの関係
+3. 3つ以上の関連インスティンクトの各クラスターについて:
+   - 進化のタイプを決定 (コマンド/スキル/エージェント)
+   - 適切なファイルを生成
+   - `~/.claude/homunculus/evolved/{commands,skills,agents}/` に保存
+4. 進化した構造をソースインスティンクトにリンク
+
+## 出力形式
+
+```
+🧬 進化分析
 ==================
 
-Found 3 clusters ready for evolution:
+進化の準備ができた 3 つのクラスターが見つかりました:
 
-## Cluster 1: Database Migration Workflow
-Instincts: new-table-migration, update-schema, regenerate-types
-Type: Command
-Confidence: 85% (based on 12 observations)
+## クラスター 1: データベースマイグレーションワークフロー
+インスティンクト: new-table-migration, update-schema, regenerate-types
+タイプ: コマンド
+信頼度: 85% (12 個の観察に基づく)
 
-Would create: /new-table command
-Files:
+作成される: /new-table コマンド
+ファイル:
   - ~/.claude/homunculus/evolved/commands/new-table.md
 
-## Cluster 2: Functional Code Style
-Instincts: prefer-functional, use-immutable, avoid-classes, pure-functions
-Type: Skill
-Confidence: 78% (based on 8 observations)
+## クラスター 2: 関数型コードスタイル
+インスティンクト: prefer-functional, use-immutable, avoid-classes, pure-functions
+タイプ: スキル
+信頼度: 78% (8 個の観察に基づく)
 
-Would create: functional-patterns skill
-Files:
+作成される: functional-patterns スキル
+ファイル:
   - ~/.claude/homunculus/evolved/skills/functional-patterns.md
 
-## Cluster 3: Debugging Process
-Instincts: debug-check-logs, debug-isolate, debug-reproduce, debug-verify
-Type: Agent
-Confidence: 72% (based on 6 observations)
+## クラスター 3: デバッグプロセス
+インスティンクト: debug-check-logs, debug-isolate, debug-reproduce, debug-verify
+タイプ: エージェント
+信頼度: 72% (6 個の観察に基づく)
 
-Would create: debugger agent
-Files:
+作成される: debugger エージェント
+ファイル:
   - ~/.claude/homunculus/evolved/agents/debugger.md
 
 ---
-Run `/evolve --execute` to create these files.
+これらのファイルを作成するには `/evolve --execute` を実行してください。
 ```
 
-## Flags
+## フラグ
 
-- `--execute`: Actually create the evolved structures (default is preview)
-- `--dry-run`: Preview without creating
-- `--domain <name>`: Only evolve instincts in specified domain
-- `--threshold <n>`: Minimum instincts required to form cluster (default: 3)
-- `--type <command|skill|agent>`: Only create specified type
+- `--execute`: 実際に進化した構造を作成 (デフォルトはプレビュー)
+- `--dry-run`: 作成せずにプレビュー
+- `--domain <name>`: 指定されたドメイン内のインスティンクトのみ進化
+- `--threshold <n>`: クラスターを形成するために必要な最小インスティンクト (デフォルト: 3)
+- `--type <command|skill|agent>`: 指定されたタイプのみ作成
 
-## Generated File Format
+## 生成されたファイル形式
 
-### Command
+### コマンド
 ```markdown
 ---
 name: new-table
-description: Create a new database table with migration, schema update, and type generation
+description: マイグレーション、スキーマ更新、タイプ生成を含む新しいデータベーステーブルを作成
 command: /new-table
 evolved_from:
   - new-table-migration
@@ -150,36 +150,36 @@ evolved_from:
   - regenerate-types
 ---
 
-# New Table Command
+# 新しいテーブルコマンド
 
-[Generated content based on clustered instincts]
+[クラスタリングされたインスティンクトに基づいて生成されたコンテンツ]
 
-## Steps
+## ステップ
 1. ...
 2. ...
 ```
 
-### Skill
+### スキル
 ```markdown
 ---
 name: functional-patterns
-description: Enforce functional programming patterns
+description: 関数型プログラミングパターンを強制
 evolved_from:
   - prefer-functional
   - use-immutable
   - avoid-classes
 ---
 
-# Functional Patterns Skill
+# 関数型パターンスキル
 
-[Generated content based on clustered instincts]
+[クラスタリングされたインスティンクトに基づいて生成されたコンテンツ]
 ```
 
-### Agent
+### エージェント
 ```markdown
 ---
 name: debugger
-description: Systematic debugging agent
+description: 体系的なデバッグエージェント
 model: sonnet
 evolved_from:
   - debug-check-logs
@@ -187,7 +187,7 @@ evolved_from:
   - debug-reproduce
 ---
 
-# Debugger Agent
+# デバッガーエージェント
 
-[Generated content based on clustered instincts]
+[クラスタリングされたインスティンクトに基づいて生成されたコンテンツ]
 ```

@@ -1,32 +1,32 @@
 ---
 name: instinct-import
-description: Import instincts from teammates, Skill Creator, or other sources
+description: 同僚、スキル作成者、またはその他のソースからインスティンクトをインポート
 command: true
 ---
 
-# Instinct Import Command
+# インスティンクトインポートコマンド
 
-## Implementation
+## 実装
 
-Run the instinct CLI using the plugin root path:
+プラグインルートパスを使用してインスティンクト CLI を実行:
 
 ```bash
 python3 "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/scripts/instinct-cli.py" import <file-or-url> [--dry-run] [--force] [--min-confidence 0.7]
 ```
 
-Or if `CLAUDE_PLUGIN_ROOT` is not set (manual installation):
+または `CLAUDE_PLUGIN_ROOT` が設定されていない場合 (手動インストール):
 
 ```bash
 python3 ~/.claude/skills/continuous-learning-v2/scripts/instinct-cli.py import <file-or-url>
 ```
 
-Import instincts from:
-- Teammates' exports
-- Skill Creator (repo analysis)
-- Community collections
-- Previous machine backups
+以下からインスティンクトをインポート:
+- 同僚のエクスポート
+- スキル作成者 (リポジトリ分析)
+- コミュニティコレクション
+- 前のマシンバックアップ
 
-## Usage
+## 使用法
 
 ```
 /instinct-import team-instincts.yaml
@@ -34,109 +34,109 @@ Import instincts from:
 /instinct-import --from-skill-creator acme/webapp
 ```
 
-## What to Do
+## やること
 
-1. Fetch the instinct file (local path or URL)
-2. Parse and validate the format
-3. Check for duplicates with existing instincts
-4. Merge or add new instincts
-5. Save to `~/.claude/homunculus/instincts/inherited/`
+1. インスティンクトファイルをフェッチ (ローカルパスまたはURL)
+2. フォーマットを解析して検証
+3. 既存インスティンクトとの重複をチェック
+4. マージするか新しいインスティンクトを追加
+5. `~/.claude/homunculus/instincts/inherited/` に保存
 
-## Import Process
+## インポートプロセス
 
 ```
-📥 Importing instincts from: team-instincts.yaml
+📥 インポート元: team-instincts.yaml
 ================================================
 
-Found 12 instincts to import.
+インポートするインスティンクト: 12個
 
-Analyzing conflicts...
+競合を分析中...
 
-## New Instincts (8)
-These will be added:
-  ✓ use-zod-validation (confidence: 0.7)
-  ✓ prefer-named-exports (confidence: 0.65)
-  ✓ test-async-functions (confidence: 0.8)
+## 新規インスティンクト (8)
+追加されます:
+  ✓ use-zod-validation (信頼度: 0.7)
+  ✓ prefer-named-exports (信頼度: 0.65)
+  ✓ test-async-functions (信頼度: 0.8)
   ...
 
-## Duplicate Instincts (3)
-Already have similar instincts:
+## 重複インスティンクト (3)
+既に類似のインスティンクトがあります:
   ⚠️ prefer-functional-style
-     Local: 0.8 confidence, 12 observations
-     Import: 0.7 confidence
-     → Keep local (higher confidence)
+     ローカル: 0.8 信頼度, 12 回の観察
+     インポート: 0.7 信頼度
+     → ローカルを保持 (より高い信頼度)
 
   ⚠️ test-first-workflow
-     Local: 0.75 confidence
-     Import: 0.9 confidence
-     → Update to import (higher confidence)
+     ローカル: 0.75 信頼度
+     インポート: 0.9 信頼度
+     → インポートに更新 (より高い信頼度)
 
-## Conflicting Instincts (1)
-These contradict local instincts:
+## 競合インスティンクト (1)
+これらはローカルインスティンクトと矛盾:
   ❌ use-classes-for-services
-     Conflicts with: avoid-classes
-     → Skip (requires manual resolution)
+     競合先: avoid-classes
+     → スキップ (手動解決が必要)
 
 ---
-Import 8 new, update 1, skip 3?
+新規 8 個を追加、1 個を更新、3 個をスキップしますか?
 ```
 
-## Merge Strategies
+## マージ戦略
 
-### For Duplicates
-When importing an instinct that matches an existing one:
-- **Higher confidence wins**: Keep the one with higher confidence
-- **Merge evidence**: Combine observation counts
-- **Update timestamp**: Mark as recently validated
+### 重複の場合
+既存のインスティンクトと一致するインスティンクトをインポートするとき:
+- **より高い信頼度が勝つ**: より高い信頼度のものを保持
+- **証拠をマージ**: 観察数を結合
+- **タイムスタンプを更新**: 最近検証されたものとしてマーク
 
-### For Conflicts
-When importing an instinct that contradicts an existing one:
-- **Skip by default**: Don't import conflicting instincts
-- **Flag for review**: Mark both as needing attention
-- **Manual resolution**: User decides which to keep
+### 競合の場合
+既存のインスティンクトと矛盾するインスティンクトをインポートするとき:
+- **デフォルトでスキップ**: 競合するインスティンクトをインポートしない
+- **レビュー用にフラグ**: 両方を注意が必要として マーク
+- **手動解決**: ユーザーが保持するものを決定
 
-## Source Tracking
+## ソース追跡
 
-Imported instincts are marked with:
+インポートされたインスティンクトは以下でマーク:
 ```yaml
 source: "inherited"
 imported_from: "team-instincts.yaml"
 imported_at: "2025-01-22T10:30:00Z"
-original_source: "session-observation"  # or "repo-analysis"
+original_source: "session-observation"  # または "repo-analysis"
 ```
 
-## Skill Creator Integration
+## スキルクリエーター統合
 
-When importing from Skill Creator:
+スキルクリエーターからインポートするとき:
 
 ```
 /instinct-import --from-skill-creator acme/webapp
 ```
 
-This fetches instincts generated from repo analysis:
-- Source: `repo-analysis`
-- Higher initial confidence (0.7+)
-- Linked to source repository
+リポジトリ分析から生成されたインスティンクトをフェッチ:
+- ソース: `repo-analysis`
+- より高い初期信頼度 (0.7+)
+- ソースリポジトリにリンク
 
-## Flags
+## フラグ
 
-- `--dry-run`: Preview without importing
-- `--force`: Import even if conflicts exist
-- `--merge-strategy <higher|local|import>`: How to handle duplicates
-- `--from-skill-creator <owner/repo>`: Import from Skill Creator analysis
-- `--min-confidence <n>`: Only import instincts above threshold
+- `--dry-run`: インポートせずにプレビュー
+- `--force`: 競合が存在しても インポート
+- `--merge-strategy <higher|local|import>`: 重複の処理方法
+- `--from-skill-creator <owner/repo>`: スキルクリエーター分析からインポート
+- `--min-confidence <n>`: 閾値以上のインスティンクトのみをインポート
 
-## Output
+## 出力
 
-After import:
+インポート後:
 ```
-✅ Import complete!
+✅ インポート完了!
 
-Added: 8 instincts
-Updated: 1 instinct
-Skipped: 3 instincts (2 duplicates, 1 conflict)
+追加: 8 インスティンクト
+更新: 1 インスティンクト
+スキップ: 3 インスティンクト (重複 2、競合 1)
 
-New instincts saved to: ~/.claude/homunculus/instincts/inherited/
+新規インスティンクトは以下に保存されました: ~/.claude/homunculus/instincts/inherited/
 
-Run /instinct-status to see all instincts.
+/instinct-status を実行してすべてのインスティンクトを表示してください。
 ```
