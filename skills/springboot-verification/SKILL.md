@@ -1,100 +1,100 @@
 ---
 name: springboot-verification
-description: Verification loop for Spring Boot projects: build, static analysis, tests with coverage, security scans, and diff review before release or PR.
+description: Spring Boot プロジェクトの検証ループ：ビルド、静的分析、カバレッジ付きテスト、セキュリティスキャン、リリースまたは PR 前の差分レビュー。
 ---
 
-# Spring Boot Verification Loop
+# Spring Boot 検証ループ
 
-Run before PRs, after major changes, and pre-deploy.
+PR の前に、大きな変更後、デプロイ前に実行します。
 
-## Phase 1: Build
+## フェーズ 1: ビルド
 
 ```bash
 mvn -T 4 clean verify -DskipTests
-# or
+# または
 ./gradlew clean assemble -x test
 ```
 
-If build fails, stop and fix.
+ビルドが失敗した場合は停止して修正してください。
 
-## Phase 2: Static Analysis
+## フェーズ 2: 静的分析
 
-Maven (common plugins):
+Maven（一般的なプラグイン）：
 ```bash
 mvn -T 4 spotbugs:check pmd:check checkstyle:check
 ```
 
-Gradle (if configured):
+Gradle（設定されている場合）：
 ```bash
 ./gradlew checkstyleMain pmdMain spotbugsMain
 ```
 
-## Phase 3: Tests + Coverage
+## フェーズ 3: テスト + カバレッジ
 
 ```bash
 mvn -T 4 test
-mvn jacoco:report   # verify 80%+ coverage
-# or
+mvn jacoco:report   # 80% 以上のカバレッジを確認
+# または
 ./gradlew test jacocoTestReport
 ```
 
-Report:
-- Total tests, passed/failed
-- Coverage % (lines/branches)
+レポート：
+- テスト総数、成功/失敗
+- カバレッジ %（行/ブランチ）
 
-## Phase 4: Security Scan
+## フェーズ 4: セキュリティスキャン
 
 ```bash
-# Dependency CVEs
+# 依存関係の CVE
 mvn org.owasp:dependency-check-maven:check
-# or
+# または
 ./gradlew dependencyCheckAnalyze
 
-# Secrets (git)
-git secrets --scan  # if configured
+# シークレット（git）
+git secrets --scan  # 設定されている場合
 ```
 
-## Phase 5: Lint/Format (optional gate)
+## フェーズ 5: Lint/フォーマット（オプションゲート）
 
 ```bash
-mvn spotless:apply   # if using Spotless plugin
+mvn spotless:apply   # Spotless プラグインを使用している場合
 ./gradlew spotlessApply
 ```
 
-## Phase 6: Diff Review
+## フェーズ 6: 差分レビュー
 
 ```bash
 git diff --stat
 git diff
 ```
 
-Checklist:
-- No debugging logs left (`System.out`, `log.debug` without guards)
-- Meaningful errors and HTTP statuses
-- Transactions and validation present where needed
-- Config changes documented
+チェックリスト：
+- デバッグログが残されていない（`System.out`、保護されていない `log.debug`）
+- 意味のあるエラーとHTTPステータス
+- トランザクションと検証が必要な場所に存在
+- 設定の変更をドキュメント化
 
-## Output Template
+## 出力テンプレート
 
 ```
-VERIFICATION REPORT
-===================
-Build:     [PASS/FAIL]
-Static:    [PASS/FAIL] (spotbugs/pmd/checkstyle)
-Tests:     [PASS/FAIL] (X/Y passed, Z% coverage)
-Security:  [PASS/FAIL] (CVE findings: N)
-Diff:      [X files changed]
+検証レポート
+============
+ビルド:     [PASS/FAIL]
+静的:      [PASS/FAIL] (spotbugs/pmd/checkstyle)
+テスト:    [PASS/FAIL] (X/Y 成功、Z% カバレッジ)
+セキュリティ: [PASS/FAIL] (CVE 検出数: N)
+差分:      [X ファイル変更]
 
-Overall:   [READY / NOT READY]
+全体:      [準備完了 / 準備未完了]
 
-Issues to Fix:
+修正する問題:
 1. ...
 2. ...
 ```
 
-## Continuous Mode
+## 継続モード
 
-- Re-run phases on significant changes or every 30–60 minutes in long sessions
-- Keep a short loop: `mvn -T 4 test` + spotbugs for quick feedback
+- 重要な変更があった場合、または長いセッション中は 30 ～ 60 分ごとにフェーズを再実行
+- 短いループを維持：`mvn -T 4 test` + spotbugs で迅速なフィードバック
 
-**Remember**: Fast feedback beats late surprises. Keep the gate strict—treat warnings as defects in production systems.
+**重要**: 迅速なフィードバックは遅い驚きに勝ります。ゲートを厳格に保つ—本番システムでは警告を欠陥として扱ってください。

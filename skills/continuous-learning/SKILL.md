@@ -1,23 +1,23 @@
 ---
 name: continuous-learning
-description: Automatically extract reusable patterns from Claude Code sessions and save them as learned skills for future use.
+description: Claude Codeセッションから再利用可能なパターンを自動抽出し、将来の使用のために学習スキルとして保存します。
 ---
 
-# Continuous Learning Skill
+# 継続的学習スキル
 
-Automatically evaluates Claude Code sessions on end to extract reusable patterns that can be saved as learned skills.
+Claude Codeセッション終了時に自動的に再利用可能なパターンを抽出するスキル。
 
-## How It Works
+## 動作方法
 
-This skill runs as a **Stop hook** at the end of each session:
+このスキルは**Stop フック**としてセッション末尾で実行:
 
-1. **Session Evaluation**: Checks if session has enough messages (default: 10+)
-2. **Pattern Detection**: Identifies extractable patterns from the session
-3. **Skill Extraction**: Saves useful patterns to `~/.claude/skills/learned/`
+1. **セッション評価**: セッションに十分なメッセージがあるか確認(デフォルト: 10以上)
+2. **パターン検出**: セッションから抽出可能なパターンを特定
+3. **スキル抽出**: 有用なパターンを`~/.claude/skills/learned/`に保存
 
-## Configuration
+## 設定
 
-Edit `config.json` to customize:
+`config.json`を編集してカスタマイズ:
 
 ```json
 {
@@ -40,19 +40,19 @@ Edit `config.json` to customize:
 }
 ```
 
-## Pattern Types
+## パターンタイプ
 
-| Pattern | Description |
-|---------|-------------|
-| `error_resolution` | How specific errors were resolved |
-| `user_corrections` | Patterns from user corrections |
-| `workarounds` | Solutions to framework/library quirks |
-| `debugging_techniques` | Effective debugging approaches |
-| `project_specific` | Project-specific conventions |
+| パターン | 説明 |
+|---------|------|
+| `error_resolution` | 特定のエラーが解決された方法 |
+| `user_corrections` | ユーザー修正からのパターン |
+| `workarounds` | フレームワーク/ライブラリの奇癖への解決策 |
+| `debugging_techniques` | 効果的なデバッグアプローチ |
+| `project_specific` | プロジェクト固有の慣例 |
 
-## Hook Setup
+## フック設定
 
-Add to your `~/.claude/settings.json`:
+`~/.claude/settings.json`に追加:
 
 ```json
 {
@@ -68,43 +68,43 @@ Add to your `~/.claude/settings.json`:
 }
 ```
 
-## Why Stop Hook?
+## なぜStop フック?
 
-- **Lightweight**: Runs once at session end
-- **Non-blocking**: Doesn't add latency to every message
-- **Complete context**: Has access to full session transcript
+- **軽量**: セッション終了時に1回実行
+- **ノンブロッキング**: メッセージごとにレイテンシを追加しない
+- **完全なコンテキスト**: セッション全体のトランスクリプトにアクセス可能
 
-## Related
+## 関連項目
 
-- [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Section on continuous learning
-- `/learn` command - Manual pattern extraction mid-session
+- [長形式ガイド](https://x.com/affaanmustafa/status/2014040193557471352) - 継続的学習に関するセクション
+- `/learn`コマンド - セッション中の手動パターン抽出
 
 ---
 
-## Comparison Notes (Research: Jan 2025)
+## 比較ノート(研究: 2025年1月)
 
 ### vs Homunculus (github.com/humanplane/homunculus)
 
-Homunculus v2 takes a more sophisticated approach:
+Homunculus v2はより洗練されたアプローチを採用:
 
-| Feature | Our Approach | Homunculus v2 |
-|---------|--------------|---------------|
-| Observation | Stop hook (end of session) | PreToolUse/PostToolUse hooks (100% reliable) |
-| Analysis | Main context | Background agent (Haiku) |
-| Granularity | Full skills | Atomic "instincts" |
-| Confidence | None | 0.3-0.9 weighted |
-| Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
-| Sharing | None | Export/import instincts |
+| 機能 | 我々のアプローチ | Homunculus v2 |
+|------|---------|---------|
+| 観察 | Stop フック(セッション末尾) | PreToolUse/PostToolUse フック(100%信頼できる) |
+| 分析 | メインコンテキスト | バックグラウンドエージェント(Haiku) |
+| 粒度 | スキル全体 | アトミック「本能」 |
+| 信頼度 | なし | 0.3-0.9 加重 |
+| 進化 | スキルに直接 | 本能 → クラスタ → スキル/コマンド/エージェント |
+| 共有 | なし | 本能のエクスポート/インポート |
 
-**Key insight from homunculus:**
-> "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time. v2 uses hooks for observation (100% reliable) and instincts as the atomic unit of learned behavior."
+**Homunculusからの重要な洞察:**
+> "v1はスキルに依存して観察。スキルは確率的で～50-80%の時間発動。v2は観察用にフック(100%信頼できる)を使用し、本能を学習行動のアトミックユニットとして使用。"
 
-### Potential v2 Enhancements
+### v2潜在的強化
 
-1. **Instinct-based learning** - Smaller, atomic behaviors with confidence scoring
-2. **Background observer** - Haiku agent analyzing in parallel
-3. **Confidence decay** - Instincts lose confidence if contradicted
-4. **Domain tagging** - code-style, testing, git, debugging, etc.
-5. **Evolution path** - Cluster related instincts into skills/commands
+1. **本能ベース学習** - 信頼度スコアリング付きより小さなアトミック動作
+2. **バックグラウンド観察者** - Haikuエージェントが並列で分析
+3. **信頼度減衰** - 矛盾時に信頼度を失う本能
+4. **ドメインタグ付け** - code-style、testing、git、debugging など
+5. **進化パターン** - 関連本能をスキル/コマンドにクラスタ化
 
-See: `/Users/affoon/Documents/tasks/12-continuous-learning-v2.md` for full spec.
+参照: `/Users/affoon/Documents/tasks/12-continuous-learning-v2.md` 完全仕様を参照。

@@ -1,26 +1,26 @@
 ---
 name: springboot-tdd
-description: Test-driven development for Spring Boot using JUnit 5, Mockito, MockMvc, Testcontainers, and JaCoCo. Use when adding features, fixing bugs, or refactoring.
+description: JUnit 5、Mockito、MockMvc、Testcontainers、JaCoCo を使用した Spring Boot のテスト駆動開発。機能追加、バグ修正、リファクタリングの際に使用します。
 ---
 
-# Spring Boot TDD Workflow
+# Spring Boot TDD ワークフロー
 
-TDD guidance for Spring Boot services with 80%+ coverage (unit + integration).
+80% 以上のカバレッジ（ユニット + 統合）を備えた Spring Boot サービスの TDD ガイダンス。
 
-## When to Use
+## 使用時期
 
-- New features or endpoints
-- Bug fixes or refactors
-- Adding data access logic or security rules
+- 新機能またはエンドポイントの追加
+- バグ修正またはリファクタリング
+- データアクセスロジックまたはセキュリティルールの追加
 
-## Workflow
+## ワークフロー
 
-1) Write tests first (they should fail)
-2) Implement minimal code to pass
-3) Refactor with tests green
-4) Enforce coverage (JaCoCo)
+1) テストを最初に記述（失敗するはず）
+2) テストを通すための最小限のコードを実装
+3) テストが成功した状態でリファクタリング
+4) カバレッジを強制（JaCoCo）
 
-## Unit Tests (JUnit 5 + Mockito)
+## ユニットテスト（JUnit 5 + Mockito）
 
 ```java
 @ExtendWith(MockitoExtension.class)
@@ -41,12 +41,12 @@ class MarketServiceTest {
 }
 ```
 
-Patterns:
+パターン：
 - Arrange-Act-Assert
-- Avoid partial mocks; prefer explicit stubbing
-- Use `@ParameterizedTest` for variants
+- 部分的なモックを避け、明示的なスタブを優先
+- バリアントには `@ParameterizedTest` を使用
 
-## Web Layer Tests (MockMvc)
+## ウェブレイヤーテスト（MockMvc）
 
 ```java
 @WebMvcTest(MarketController.class)
@@ -65,7 +65,7 @@ class MarketControllerTest {
 }
 ```
 
-## Integration Tests (SpringBootTest)
+## 統合テスト（SpringBootTest）
 
 ```java
 @SpringBootTest
@@ -86,7 +86,7 @@ class MarketIntegrationTest {
 }
 ```
 
-## Persistence Tests (DataJpaTest)
+## 永続化テスト（DataJpaTest）
 
 ```java
 @DataJpaTest
@@ -109,12 +109,12 @@ class MarketRepositoryTest {
 
 ## Testcontainers
 
-- Use reusable containers for Postgres/Redis to mirror production
-- Wire via `@DynamicPropertySource` to inject JDBC URLs into Spring context
+- PostgreSQL/Redis の再利用可能なコンテナを使用して本番環境をミラーリング
+- `@DynamicPropertySource` 経由で Spring コンテキストに JDBC URL を注入
 
-## Coverage (JaCoCo)
+## カバレッジ（JaCoCo）
 
-Maven snippet:
+Maven スニペット：
 ```xml
 <plugin>
   <groupId>org.jacoco</groupId>
@@ -133,13 +133,13 @@ Maven snippet:
 </plugin>
 ```
 
-## Assertions
+## アサーション
 
-- Prefer AssertJ (`assertThat`) for readability
-- For JSON responses, use `jsonPath`
-- For exceptions: `assertThatThrownBy(...)`
+- 読みやすさのために AssertJ（`assertThat`）を優先
+- JSON レスポンスの場合は `jsonPath` を使用
+- 例外の場合：`assertThatThrownBy(...)`
 
-## Test Data Builders
+## テストデータビルダー
 
 ```java
 class MarketBuilder {
@@ -149,9 +149,9 @@ class MarketBuilder {
 }
 ```
 
-## CI Commands
+## CI コマンド
 
-- Maven: `mvn -T 4 test` or `mvn verify`
+- Maven: `mvn -T 4 test` または `mvn verify`
 - Gradle: `./gradlew test jacocoTestReport`
 
-**Remember**: Keep tests fast, isolated, and deterministic. Test behavior, not implementation details.
+**重要**: テストは高速で独立しており、決定論的であることが重要です。実装の詳細ではなく、動作をテストしましょう。

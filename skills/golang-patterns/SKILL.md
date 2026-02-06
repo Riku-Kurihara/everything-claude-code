@@ -1,27 +1,27 @@
 ---
 name: golang-patterns
-description: Idiomatic Go patterns, best practices, and conventions for building robust, efficient, and maintainable Go applications.
+description: 慣用的なGoパターン、ベストプラクティス、およびロバスト、効率的で保守性の高いGoアプリケーションを構築するための慣例。
 ---
 
-# Go Development Patterns
+# Go開発パターン
 
-Idiomatic Go patterns and best practices for building robust, efficient, and maintainable applications.
+ロバスト、効率的で保守性の高いアプリケーションを構築するための慣用的なGoパターンとベストプラクティス。
 
-## When to Activate
+## アクティベーション時
 
-- Writing new Go code
-- Reviewing Go code
-- Refactoring existing Go code
-- Designing Go packages/modules
+- 新しいGoコードを書く場合
+- Goコードをレビューする場合
+- 既存のGoコードをリファクタリングする場合
+- Goパッケージ/モジュールを設計する場合
 
-## Core Principles
+## 基本原則
 
-### 1. Simplicity and Clarity
+### 1. シンプリティと明確性
 
-Go favors simplicity over cleverness. Code should be obvious and easy to read.
+Goはシンプリティを優先します。コードは明白で読みやすいべきです。
 
 ```go
-// Good: Clear and direct
+// 良い例: 明確で直感的
 func GetUser(id string) (*User, error) {
     user, err := db.FindUser(id)
     if err != nil {
@@ -30,7 +30,7 @@ func GetUser(id string) (*User, error) {
     return user, nil
 }
 
-// Bad: Overly clever
+// 悪い例: 過度に複雑
 func GetUser(id string) (*User, error) {
     return func() (*User, error) {
         if u, e := db.FindUser(id); e == nil {
@@ -42,15 +42,15 @@ func GetUser(id string) (*User, error) {
 }
 ```
 
-### 2. Make the Zero Value Useful
+### 2. ゼロ値を有用にする
 
-Design types so their zero value is immediately usable without initialization.
+型の設計時に、初期化せずにゼロ値がすぐに使用できるようにします。
 
 ```go
-// Good: Zero value is useful
+// 良い例: ゼロ値が有用
 type Counter struct {
     mu    sync.Mutex
-    count int // zero value is 0, ready to use
+    count int // ゼロ値は0で、使用可能
 }
 
 func (c *Counter) Inc() {
@@ -59,22 +59,22 @@ func (c *Counter) Inc() {
     c.mu.Unlock()
 }
 
-// Good: bytes.Buffer works with zero value
+// 良い例: bytes.Bufferはゼロ値で動作
 var buf bytes.Buffer
 buf.WriteString("hello")
 
-// Bad: Requires initialization
+// 悪い例: 初期化が必要
 type BadCounter struct {
-    counts map[string]int // nil map will panic
+    counts map[string]int // nilマップはパニック
 }
 ```
 
-### 3. Accept Interfaces, Return Structs
+### 3. インターフェースを受け取り、構造体を返す
 
-Functions should accept interface parameters and return concrete types.
+関数はインターフェースパラメータを受け取り、具体的な型を返すべきです。
 
 ```go
-// Good: Accepts interface, returns concrete type
+// 良い例: インターフェースを受け取り、具体的な型を返す
 func ProcessData(r io.Reader) (*Result, error) {
     data, err := io.ReadAll(r)
     if err != nil {
@@ -83,18 +83,18 @@ func ProcessData(r io.Reader) (*Result, error) {
     return &Result{Data: data}, nil
 }
 
-// Bad: Returns interface (hides implementation details unnecessarily)
+// 悪い例: インターフェースを返す（実装詳細を不必要に隠す）
 func ProcessData(r io.Reader) (io.Reader, error) {
     // ...
 }
 ```
 
-## Error Handling Patterns
+## エラー処理パターン
 
-### Error Wrapping with Context
+### コンテキスト付きエラーラッピング
 
 ```go
-// Good: Wrap errors with context
+// 良い例: コンテキストと共にエラーをラップ
 func LoadConfig(path string) (*Config, error) {
     data, err := os.ReadFile(path)
     if err != nil {
@@ -110,10 +110,10 @@ func LoadConfig(path string) (*Config, error) {
 }
 ```
 
-### Custom Error Types
+### カスタムエラー型
 
 ```go
-// Define domain-specific errors
+// ドメイン固有のエラーを定義
 type ValidationError struct {
     Field   string
     Message string
@@ -123,7 +123,7 @@ func (e *ValidationError) Error() string {
     return fmt.Sprintf("validation failed on %s: %s", e.Field, e.Message)
 }
 
-// Sentinel errors for common cases
+// 共通の場合のセンチネルエラー
 var (
     ErrNotFound     = errors.New("resource not found")
     ErrUnauthorized = errors.New("unauthorized")
@@ -131,17 +131,17 @@ var (
 )
 ```
 
-### Error Checking with errors.Is and errors.As
+### errors.Isとerrors.Asでのエラーチェック
 
 ```go
 func HandleError(err error) {
-    // Check for specific error
+    // 特定のエラーをチェック
     if errors.Is(err, sql.ErrNoRows) {
         log.Println("No records found")
         return
     }
 
-    // Check for error type
+    // エラー型をチェック
     var validationErr *ValidationError
     if errors.As(err, &validationErr) {
         log.Printf("Validation error on field %s: %s",
@@ -149,30 +149,30 @@ func HandleError(err error) {
         return
     }
 
-    // Unknown error
+    // 未知のエラー
     log.Printf("Unexpected error: %v", err)
 }
 ```
 
-### Never Ignore Errors
+### エラーを無視しない
 
 ```go
-// Bad: Ignoring error with blank identifier
+// 悪い例: ブランク識別子でエラーを無視
 result, _ := doSomething()
 
-// Good: Handle or explicitly document why it's safe to ignore
+// 良い例: 処理するか、なぜ無視するか明確に
 result, err := doSomething()
 if err != nil {
     return err
 }
 
-// Acceptable: When error truly doesn't matter (rare)
-_ = writer.Close() // Best-effort cleanup, error logged elsewhere
+// 受け入れられる: エラーが本当に重要でない場合（稀）
+_ = writer.Close() // ベストエフォート クリーンアップ、エラーは他で記録
 ```
 
-## Concurrency Patterns
+## 並行処理パターン
 
-### Worker Pool
+### ワーカープール
 
 ```go
 func WorkerPool(jobs <-chan Job, results chan<- Result, numWorkers int) {
@@ -193,7 +193,7 @@ func WorkerPool(jobs <-chan Job, results chan<- Result, numWorkers int) {
 }
 ```
 
-### Context for Cancellation and Timeouts
+### キャンセルとタイムアウト用のContext
 
 ```go
 func FetchWithTimeout(ctx context.Context, url string) ([]byte, error) {
@@ -215,7 +215,7 @@ func FetchWithTimeout(ctx context.Context, url string) ([]byte, error) {
 }
 ```
 
-### Graceful Shutdown
+### グレースフルシャットダウン
 
 ```go
 func GracefulShutdown(server *http.Server) {
@@ -236,7 +236,7 @@ func GracefulShutdown(server *http.Server) {
 }
 ```
 
-### errgroup for Coordinated Goroutines
+### coordinated Goroutines用のerrgroup
 
 ```go
 import "golang.org/x/sync/errgroup"
@@ -246,7 +246,7 @@ func FetchAll(ctx context.Context, urls []string) ([][]byte, error) {
     results := make([][]byte, len(urls))
 
     for i, url := range urls {
-        i, url := i, url // Capture loop variables
+        i, url := i, url // ループ変数をキャプチャ
         g.Go(func() error {
             data, err := FetchWithTimeout(ctx, url)
             if err != nil {
@@ -264,22 +264,22 @@ func FetchAll(ctx context.Context, urls []string) ([][]byte, error) {
 }
 ```
 
-### Avoiding Goroutine Leaks
+### Goroutineリークの回避
 
 ```go
-// Bad: Goroutine leak if context is cancelled
+// 悪い例: Contextがキャンセルされるとゴルーチンリーク
 func leakyFetch(ctx context.Context, url string) <-chan []byte {
     ch := make(chan []byte)
     go func() {
         data, _ := fetch(url)
-        ch <- data // Blocks forever if no receiver
+        ch <- data // レシーバーがない場合永遠にブロック
     }()
     return ch
 }
 
-// Good: Properly handles cancellation
+// 良い例: キャンセルを正しく処理
 func safeFetch(ctx context.Context, url string) <-chan []byte {
-    ch := make(chan []byte, 1) // Buffered channel
+    ch := make(chan []byte, 1) // バッファ付きチャネル
     go func() {
         data, err := fetch(url)
         if err != nil {
@@ -294,12 +294,12 @@ func safeFetch(ctx context.Context, url string) <-chan []byte {
 }
 ```
 
-## Interface Design
+## インターフェース設計
 
-### Small, Focused Interfaces
+### 小さく、フォーカスされたインターフェース
 
 ```go
-// Good: Single-method interfaces
+// 良い例: シングルメソッドインターフェース
 type Reader interface {
     Read(p []byte) (n int, err error)
 }
@@ -312,7 +312,7 @@ type Closer interface {
     Close() error
 }
 
-// Compose interfaces as needed
+// 必要に応じてインターフェースを合成
 type ReadWriteCloser interface {
     Reader
     Writer
@@ -320,13 +320,13 @@ type ReadWriteCloser interface {
 }
 ```
 
-### Define Interfaces Where They're Used
+### インターフェースを使用する場所で定義する
 
 ```go
-// In the consumer package, not the provider
+// コンシューマパッケージで定義、プロバイダではない
 package service
 
-// UserStore defines what this service needs
+// UserStoreは、このサービスが何を必要としているかを定義
 type UserStore interface {
     GetUser(id string) (*User, error)
     SaveUser(user *User) error
@@ -336,11 +336,11 @@ type Service struct {
     store UserStore
 }
 
-// Concrete implementation can be in another package
-// It doesn't need to know about this interface
+// 具体的な実装は別のパッケージに入ることができます
+// このインターフェースについて知る必要はありません
 ```
 
-### Optional Behavior with Type Assertions
+### 型アサーションを使用したオプション動作
 
 ```go
 type Flusher interface {
@@ -352,7 +352,7 @@ func WriteAndFlush(w io.Writer, data []byte) error {
         return err
     }
 
-    // Flush if supported
+    // サポートされている場合はFlush
     if f, ok := w.(Flusher); ok {
         return f.Flush()
     }
@@ -360,55 +360,55 @@ func WriteAndFlush(w io.Writer, data []byte) error {
 }
 ```
 
-## Package Organization
+## パッケージ構成
 
-### Standard Project Layout
+### 標準プロジェクトレイアウト
 
 ```text
 myproject/
 ├── cmd/
 │   └── myapp/
-│       └── main.go           # Entry point
+│       └── main.go           # エントリポイント
 ├── internal/
-│   ├── handler/              # HTTP handlers
-│   ├── service/              # Business logic
-│   ├── repository/           # Data access
-│   └── config/               # Configuration
+│   ├── handler/              # HTTPハンドラー
+│   ├── service/              # ビジネスロジック
+│   ├── repository/           # データアクセス
+│   └── config/               # 設定
 ├── pkg/
-│   └── client/               # Public API client
+│   └── client/               # パブリック API クライアント
 ├── api/
-│   └── v1/                   # API definitions (proto, OpenAPI)
-├── testdata/                 # Test fixtures
+│   └── v1/                   # API定義 (proto, OpenAPI)
+├── testdata/                 # テストフィクスチャ
 ├── go.mod
 ├── go.sum
 └── Makefile
 ```
 
-### Package Naming
+### パッケージの命名
 
 ```go
-// Good: Short, lowercase, no underscores
+// 良い例: 短い、小文字、アンダースコアなし
 package http
 package json
 package user
 
-// Bad: Verbose, mixed case, or redundant
+// 悪い例: 冗長、混合ケース、または冗長
 package httpHandler
 package json_parser
-package userService // Redundant 'Service' suffix
+package userService // 冗長な'Service'サフィックス
 ```
 
-### Avoid Package-Level State
+### パッケージレベルの状態を避ける
 
 ```go
-// Bad: Global mutable state
+// 悪い例: グローバル可変状態
 var db *sql.DB
 
 func init() {
     db, _ = sql.Open("postgres", os.Getenv("DATABASE_URL"))
 }
 
-// Good: Dependency injection
+// 良い例: 依存性の注入
 type Server struct {
     db *sql.DB
 }
@@ -418,9 +418,9 @@ func NewServer(db *sql.DB) *Server {
 }
 ```
 
-## Struct Design
+## 構造体設計
 
-### Functional Options Pattern
+### 関数型オプションパターン
 
 ```go
 type Server struct {
@@ -446,8 +446,8 @@ func WithLogger(l *log.Logger) Option {
 func NewServer(addr string, opts ...Option) *Server {
     s := &Server{
         addr:    addr,
-        timeout: 30 * time.Second, // default
-        logger:  log.Default(),    // default
+        timeout: 30 * time.Second, // デフォルト
+        logger:  log.Default(),    // デフォルト
     }
     for _, opt := range opts {
         opt(s)
@@ -455,14 +455,14 @@ func NewServer(addr string, opts ...Option) *Server {
     return s
 }
 
-// Usage
+// 使用例
 server := NewServer(":8080",
     WithTimeout(60*time.Second),
     WithLogger(customLogger),
 )
 ```
 
-### Embedding for Composition
+### 合成のための埋め込み
 
 ```go
 type Logger struct {
@@ -474,7 +474,7 @@ func (l *Logger) Log(msg string) {
 }
 
 type Server struct {
-    *Logger // Embedding - Server gets Log method
+    *Logger // 埋め込み - ServerはLogメソッドを取得
     addr    string
 }
 
@@ -485,17 +485,17 @@ func NewServer(addr string) *Server {
     }
 }
 
-// Usage
+// 使用例
 s := NewServer(":8080")
-s.Log("Starting...") // Calls embedded Logger.Log
+s.Log("Starting...") // 埋め込みLogger.Logを呼び出す
 ```
 
-## Memory and Performance
+## メモリとパフォーマンス
 
-### Preallocate Slices When Size is Known
+### サイズが既知の場合、スライスを事前割り当て
 
 ```go
-// Bad: Grows slice multiple times
+// 悪い例: スライスが複数回成長
 func processItems(items []Item) []Result {
     var results []Result
     for _, item := range items {
@@ -504,7 +504,7 @@ func processItems(items []Item) []Result {
     return results
 }
 
-// Good: Single allocation
+// 良い例: 単一の割り当て
 func processItems(items []Item) []Result {
     results := make([]Result, 0, len(items))
     for _, item := range items {
@@ -514,7 +514,7 @@ func processItems(items []Item) []Result {
 }
 ```
 
-### Use sync.Pool for Frequent Allocations
+### 頻繁な割り当てにはsync.Poolを使用
 
 ```go
 var bufferPool = sync.Pool{
@@ -531,15 +531,15 @@ func ProcessRequest(data []byte) []byte {
     }()
 
     buf.Write(data)
-    // Process...
+    // 処理...
     return buf.Bytes()
 }
 ```
 
-### Avoid String Concatenation in Loops
+### ループ内での文字列連結を避ける
 
 ```go
-// Bad: Creates many string allocations
+// 悪い例: 多くの文字列割り当てを作成
 func join(parts []string) string {
     var result string
     for _, p := range parts {
@@ -548,7 +548,7 @@ func join(parts []string) string {
     return result
 }
 
-// Good: Single allocation with strings.Builder
+// 良い例: strings.Builderで単一割り当て
 func join(parts []string) string {
     var sb strings.Builder
     for i, p := range parts {
@@ -560,41 +560,41 @@ func join(parts []string) string {
     return sb.String()
 }
 
-// Best: Use standard library
+// ベスト: 標準ライブラリを使用
 func join(parts []string) string {
     return strings.Join(parts, ",")
 }
 ```
 
-## Go Tooling Integration
+## Goツール統合
 
-### Essential Commands
+### 必須コマンド
 
 ```bash
-# Build and run
+# ビルドと実行
 go build ./...
 go run ./cmd/myapp
 
-# Testing
+# テスト
 go test ./...
 go test -race ./...
 go test -cover ./...
 
-# Static analysis
+# 静的分析
 go vet ./...
 staticcheck ./...
 golangci-lint run
 
-# Module management
+# モジュール管理
 go mod tidy
 go mod verify
 
-# Formatting
+# フォーマット
 gofmt -w .
 goimports -w .
 ```
 
-### Recommended Linter Configuration (.golangci.yml)
+### 推奨Linter設定 (.golangci.yml)
 
 ```yaml
 linters:
@@ -621,53 +621,53 @@ issues:
   exclude-use-default: false
 ```
 
-## Quick Reference: Go Idioms
+## クイックリファレンス: Go慣用句
 
-| Idiom | Description |
-|-------|-------------|
-| Accept interfaces, return structs | Functions accept interface params, return concrete types |
-| Errors are values | Treat errors as first-class values, not exceptions |
-| Don't communicate by sharing memory | Use channels for coordination between goroutines |
-| Make the zero value useful | Types should work without explicit initialization |
-| A little copying is better than a little dependency | Avoid unnecessary external dependencies |
-| Clear is better than clever | Prioritize readability over cleverness |
-| gofmt is no one's favorite but everyone's friend | Always format with gofmt/goimports |
-| Return early | Handle errors first, keep happy path unindented |
+| 慣用句 | 説明 |
+|-------|------|
+| インターフェースを受け取り、構造体を返す | 関数がインターフェース パラメータを受け取り、具体的な型を返す |
+| エラーは値 | エラーを第一級の値として扱う、例外ではない |
+| メモリ共有によって通信しない | ゴルーチン間の調整にはチャネルを使用 |
+| ゼロ値を有用にする | 型は明示的な初期化なしで機能すべき |
+| 少しのコピーは少しの依存より良い | 不要な外部依存を避ける |
+| 明確はクレバーより良い | 賢さより読みやすさを優先 |
+| gofmtは誰のお気に入りでもないが、皆の友 | 常にgofmt/goimportsでフォーマット |
+| 早期リターン | エラーを最初に処理し、ハッピーパスをインデント外に保つ |
 
-## Anti-Patterns to Avoid
+## 避けるべきアンチパターン
 
 ```go
-// Bad: Naked returns in long functions
+// 悪い例: 長い関数での裸のリターン
 func process() (result int, err error) {
-    // ... 50 lines ...
-    return // What is being returned?
+    // ... 50行 ...
+    return // 何が返されているか？
 }
 
-// Bad: Using panic for control flow
+// 悪い例: パニックを制御フローに使用
 func GetUser(id string) *User {
     user, err := db.Find(id)
     if err != nil {
-        panic(err) // Don't do this
+        panic(err) // これをしない
     }
     return user
 }
 
-// Bad: Passing context in struct
+// 悪い例: 構造体にcontextを渡す
 type Request struct {
-    ctx context.Context // Context should be first param
+    ctx context.Context // Contextは最初のパラメータにすべき
     ID  string
 }
 
-// Good: Context as first parameter
+// 良い例: 最初のパラメータとしてContext
 func ProcessRequest(ctx context.Context, id string) error {
     // ...
 }
 
-// Bad: Mixing value and pointer receivers
+// 悪い例: 値と ポインターレシーバを混合
 type Counter struct{ n int }
-func (c Counter) Value() int { return c.n }    // Value receiver
-func (c *Counter) Increment() { c.n++ }        // Pointer receiver
-// Pick one style and be consistent
+func (c Counter) Value() int { return c.n }    // 値レシーバ
+func (c *Counter) Increment() { c.n++ }        // ポインターレシーバ
+// 1つのスタイルを選んで一貫性を保つ
 ```
 
-**Remember**: Go code should be boring in the best way - predictable, consistent, and easy to understand. When in doubt, keep it simple.
+**注意**: Goコードは最良の意味で退屈であるべき - 予測可能で、一貫性があり、理解しやすい。確信がない場合は、シンプルに保ちます。
