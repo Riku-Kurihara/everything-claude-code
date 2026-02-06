@@ -1,70 +1,70 @@
-# /learn - Extract Reusable Patterns
+# /learn - 再利用可能なパターンを抽出
 
-Analyze the current session and extract any patterns worth saving as skills.
+現在のセッションを分析し、スキルとして保存する価値のあるパターンを抽出します。
 
-## Trigger
+## トリガー
 
-Run `/learn` at any point during a session when you've solved a non-trivial problem.
+非自明な問題を解決したセッション中のいつでも `/learn` を実行してください。
 
-## What to Extract
+## 何を抽出するか
 
-Look for:
+以下を探してください:
 
-1. **Error Resolution Patterns**
-   - What error occurred?
-   - What was the root cause?
-   - What fixed it?
-   - Is this reusable for similar errors?
+1. **エラー解決パターン**
+   - どのエラーが発生したか?
+   - 根本原因は何だったか?
+   - それを修正したのは何か?
+   - これは同様のエラーに対して再利用可能か?
 
-2. **Debugging Techniques**
-   - Non-obvious debugging steps
-   - Tool combinations that worked
-   - Diagnostic patterns
+2. **デバッグ手法**
+   - 明らかでないデバッグステップ
+   - うまくいったツールの組み合わせ
+   - 診断パターン
 
-3. **Workarounds**
-   - Library quirks
-   - API limitations
-   - Version-specific fixes
+3. **ワークアラウンド**
+   - ライブラリのクセ
+   - API の制限
+   - バージョン固有の修正
 
-4. **Project-Specific Patterns**
-   - Codebase conventions discovered
-   - Architecture decisions made
-   - Integration patterns
+4. **プロジェクト固有のパターン**
+   - 発見したコードベース規約
+   - 行われたアーキテクチャ決定
+   - 統合パターン
 
-## Output Format
+## 出力形式
 
-Create a skill file at `~/.claude/skills/learned/[pattern-name].md`:
+`~/.claude/skills/learned/[pattern-name].md` でスキルファイルを作成:
 
 ```markdown
-# [Descriptive Pattern Name]
+# [説明的なパターン名]
 
-**Extracted:** [Date]
-**Context:** [Brief description of when this applies]
+**抽出:** [日付]
+**コンテキスト:** [このパターンが適用される時期の簡潔な説明]
 
-## Problem
-[What problem this solves - be specific]
+## 問題
+[このパターンが解決する問題 - 具体的に]
 
-## Solution
-[The pattern/technique/workaround]
+## ソリューション
+[パターン/テクニック/ワークアラウンド]
 
-## Example
-[Code example if applicable]
+## 例
+[該当する場合はコード例]
 
-## When to Use
-[Trigger conditions - what should activate this skill]
+## 使用する場合
+[トリガー条件 - このスキルを起動すべき条件]
 ```
 
-## Process
+## プロセス
 
-1. Review the session for extractable patterns
-2. Identify the most valuable/reusable insight
-3. Draft the skill file
-4. Ask user to confirm before saving
-5. Save to `~/.claude/skills/learned/`
+1. セッションを抽出可能なパターンについてレビュー
+2. 最も価値のある/再利用可能なインサイトを特定
+3. スキルファイルをドラフト
+4. 保存前にユーザーに確認を求める
+5. `~/.claude/skills/learned/` に保存
 
-## Notes
+## 注記
 
-- Don't extract trivial fixes (typos, simple syntax errors)
-- Don't extract one-time issues (specific API outages, etc.)
-- Focus on patterns that will save time in future sessions
-- Keep skills focused - one pattern per skill
+- 簡単な修正は抽出しないでください (タイプミス、単純な構文エラー)
+- 一回限りの問題は抽出しないでください (特定のAPI停止など)
+- 今後のセッションで時間を節約するパターンに焦点を当てる
+- スキルを焦点を絞る - スキルあたり1つのパターン

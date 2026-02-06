@@ -1,18 +1,18 @@
-# Plan - Multi-Model Collaborative Planning
+# プラン - マルチモデル協力計画
 
-Multi-model collaborative planning - Context retrieval + Dual-model analysis → Generate step-by-step implementation plan.
+マルチモデル協力計画 - コンテキスト取得 + デュアルモデル分析 → ステップバイステップ実装計画を生成。
 
 $ARGUMENTS
 
 ---
 
-## Core Protocols
+## コアプロトコル
 
-- **Language Protocol**: Use **English** when interacting with tools/models, communicate with user in their language
-- **Mandatory Parallel**: Codex/Gemini calls MUST use `run_in_background: true` (including single model calls, to avoid blocking main thread)
-- **Code Sovereignty**: External models have **zero filesystem write access**, all modifications by Claude
-- **Stop-Loss Mechanism**: Do not proceed to next phase until current phase output is validated
-- **Planning Only**: This command allows reading context and writing to `.claude/plan/*` plan files, but **NEVER modify production code**
+- **言語プロトコル**: ツール/モデルと相互作用するときは **英語** を使用し、ユーザーとは彼らの言語でコミュニケーション
+- **必須並列**: Codex/Gemini 呼び出しは `run_in_background: true` を使用する必要があります (メインスレッドをブロックしないために単一モデル呼び出しを含む)
+- **コード主権**: 外部モデルは **ゼロのファイルシステム書き込みアクセス** を持つ、すべての変更は Claude
+- **ロスカットメカニズム**: 現在のフェーズ出力が検証されるまで次のフェーズに進まない
+- **計画のみ**: このコマンドはコンテキストを読むことと `.claude/plan/*` 計画ファイルに書くことを許可します、しかし **本番コードは決して変更しない**
 
 ---
 
@@ -61,17 +61,17 @@ TaskOutput({ task_id: "<task_id>", block: true, timeout: 600000 })
 
 ---
 
-## Execution Workflow
+## 実行ワークフロー
 
-**Planning Task**: $ARGUMENTS
+**計画タスク**: $ARGUMENTS
 
-### Phase 1: Full Context Retrieval
+### フェーズ 1: 完全なコンテキスト取得
 
 `[Mode: Research]`
 
-#### 1.1 Prompt Enhancement (MUST execute first)
+#### 1.1 プロンプト強化 (必ず最初に実行)
 
-**MUST call `mcp__ace-tool__enhance_prompt` tool**:
+**`mcp__ace-tool__enhance_prompt` ツールを必ず呼び出し**:
 
 ```
 mcp__ace-tool__enhance_prompt({
@@ -81,11 +81,11 @@ mcp__ace-tool__enhance_prompt({
 })
 ```
 
-Wait for enhanced prompt, **replace original $ARGUMENTS with enhanced result** for all subsequent phases.
+強化されたプロンプトを待機して、**すべての後続フェーズのために元の $ARGUMENTS を強化結果に置き換え**。
 
-#### 1.2 Context Retrieval
+#### 1.2 コンテキスト取得
 
-**Call `mcp__ace-tool__search_context` tool**:
+**`mcp__ace-tool__search_context` ツールを呼び出し**:
 
 ```
 mcp__ace-tool__search_context({
@@ -94,69 +94,69 @@ mcp__ace-tool__search_context({
 })
 ```
 
-- Build semantic query using natural language (Where/What/How)
-- **NEVER answer based on assumptions**
-- If MCP unavailable: fallback to Glob + Grep for file discovery and key symbol location
+- 自然言語を使用してセマンティッククエリを構築 (Where/What/How)
+- **決して仮定に基づいて回答しないこと**
+- MCP が利用不可: ファイル検出とキーシンボルの場所には Glob + Grep にフォールバック
 
-#### 1.3 Completeness Check
+#### 1.3 完全性チェック
 
-- Must obtain **complete definitions and signatures** for relevant classes, functions, variables
-- If context insufficient, trigger **recursive retrieval**
-- Prioritize output: entry file + line number + key symbol name; add minimal code snippets only when necessary to resolve ambiguity
+- 関連クラス、関数、変数の**完全な定義とシグネチャ**を取得する必要がある
+- コンテキストが不十分な場合、**再帰的取得**をトリガー
+- 出力を優先: エントリファイル + 行番号 + キーシンボル名; 曖昧さを解決する場合のみ最小限のコードスニペットを追加
 
-#### 1.4 Requirement Alignment
+#### 1.4 要件の調整
 
-- If requirements still have ambiguity, **MUST** output guiding questions for user
-- Until requirement boundaries are clear (no omissions, no redundancy)
+- 要件に曖昧さがまだある場合、**必ず**ユーザーに指導質問を出力
+- 要件の境界が明確になるまで (省略なし、冗長性なし)
 
-### Phase 2: Multi-Model Collaborative Analysis
+### フェーズ 2: マルチモデル協力分析
 
 `[Mode: Analysis]`
 
-#### 2.1 Distribute Inputs
+#### 2.1 入力を分配
 
-**Parallel call** Codex and Gemini (`run_in_background: true`):
+**Codex と Gemini の並列呼び出し** (`run_in_background: true`):
 
-Distribute **original requirement** (without preset opinions) to both models:
+**元の要件** (プリセット意見なし) を両方のモデルに分配:
 
-1. **Codex Backend Analysis**:
+1. **Codex バックエンド分析**:
    - ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
-   - Focus: Technical feasibility, architecture impact, performance considerations, potential risks
-   - OUTPUT: Multi-perspective solutions + pros/cons analysis
+   - フォーカス: 技術的実現可能性、アーキテクチャへの影響、パフォーマンスの考慮、潜在的なリスク
+   - 出力: 多角的ソリューション + メリット/デメリット分析
 
-2. **Gemini Frontend Analysis**:
+2. **Gemini フロントエンド分析**:
    - ROLE_FILE: `~/.claude/.ccg/prompts/gemini/analyzer.md`
-   - Focus: UI/UX impact, user experience, visual design
-   - OUTPUT: Multi-perspective solutions + pros/cons analysis
+   - フォーカス: UI/UX への影響、ユーザーエクスペリエンス、ビジュアルデザイン
+   - 出力: 多角的ソリューション + メリット/デメリット分析
 
-Wait for both models' complete results with `TaskOutput`. **Save SESSION_ID** (`CODEX_SESSION` and `GEMINI_SESSION`).
+`TaskOutput` で両方のモデルの完全な結果を待機。**SESSION_ID を保存** (`CODEX_SESSION` と `GEMINI_SESSION`)。
 
-#### 2.2 Cross-Validation
+#### 2.2 相互検証
 
-Integrate perspectives and iterate for optimization:
+視点を統合し、最適化のために反復:
 
-1. **Identify consensus** (strong signal)
-2. **Identify divergence** (needs weighing)
-3. **Complementary strengths**: Backend logic follows Codex, Frontend design follows Gemini
-4. **Logical reasoning**: Eliminate logical gaps in solutions
+1. **コンセンサスを特定** (強い信号)
+2. **分岐を特定** (重み付けが必要)
+3. **補完的な強み**: バックエンドロジックは Codex に従う、フロントエンドデザインは Gemini に従う
+4. **論理的推論**: ソリューション内の論理的ギャップを排除
 
-#### 2.3 (Optional but Recommended) Dual-Model Plan Draft
+#### 2.3 (オプションだが推奨) デュアルモデルプラン草案
 
-To reduce risk of omissions in Claude's synthesized plan, can parallel have both models output "plan drafts" (still **NOT allowed** to modify files):
+Claude の合成計画における省略のリスクを減らすために、両方のモデルが「計画草案」を出力できます (**ファイルを変更することは許可されていません**):
 
-1. **Codex Plan Draft** (Backend authority):
+1. **Codex プラン草案** (バックエンド権限):
    - ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
-   - OUTPUT: Step-by-step plan + pseudo-code (focus: data flow/edge cases/error handling/test strategy)
+   - 出力: ステップバイステップ計画 + 疑似コード (フォーカス: データフロー/エッジケース/エラーハンドリング/テスト戦略)
 
-2. **Gemini Plan Draft** (Frontend authority):
+2. **Gemini プラン草案** (フロントエンド権限):
    - ROLE_FILE: `~/.claude/.ccg/prompts/gemini/architect.md`
-   - OUTPUT: Step-by-step plan + pseudo-code (focus: information architecture/interaction/accessibility/visual consistency)
+   - 出力: ステップバイステップ計画 + 疑似コード (フォーカス: 情報アーキテクチャ/相互作用/アクセシビリティ/ビジュアル一貫性)
 
-Wait for both models' complete results with `TaskOutput`, record key differences in their suggestions.
+`TaskOutput` で両方のモデルの完全な結果を待機し、彼らの提案の主要な違いを記録。
 
-#### 2.4 Generate Implementation Plan (Claude Final Version)
+#### 2.4 実装計画を生成 (Claude 最終版)
 
-Synthesize both analyses, generate **Step-by-step Implementation Plan**:
+両方の分析を合成し、**ステップバイステップ実装計画**を生成:
 
 ```markdown
 ## Implementation Plan: <Task Name>
@@ -188,63 +188,63 @@ Synthesize both analyses, generate **Step-by-step Implementation Plan**:
 - GEMINI_SESSION: <session_id>
 ```
 
-### Phase 2 End: Plan Delivery (Not Execution)
+### フェーズ 2 終了: 計画配信 (実行ではなく)
 
-**`/ccg:plan` responsibilities end here, MUST execute the following actions**:
+**`/ccg:plan` の責任がここで終了し、次のアクションを実行する必須**:
 
-1. Present complete implementation plan to user (including pseudo-code)
-2. Save plan to `.claude/plan/<feature-name>.md` (extract feature name from requirement, e.g., `user-auth`, `payment-module`)
-3. Output prompt in **bold text** (MUST use actual saved file path):
+1. ユーザーに完全な実装計画を提示 (疑似コードを含む)
+2. `.claude/plan/<feature-name>.md` に計画を保存 (要件から機能名を抽出、例: `user-auth`, `payment-module`)
+3. **太字テキスト**で出力プロンプト (実際に保存されたファイルパスを使用する必須):
 
    ---
-   **Plan generated and saved to `.claude/plan/actual-feature-name.md`**
+   **計画が生成され、`.claude/plan/actual-feature-name.md` に保存されました**
 
-   **Please review the plan above. You can:**
-   - **Modify plan**: Tell me what needs adjustment, I'll update the plan
-   - **Execute plan**: Copy the following command to a new session
+   **上記の計画をレビューしてください。以下のことができます:**
+   - **計画を変更**: 何を調整する必要があるかを教えてください。計画を更新します
+   - **計画を実行**: 次のコマンドを新しいセッションにコピー
 
    ```
    /ccg:execute .claude/plan/actual-feature-name.md
    ```
    ---
 
-   **NOTE**: The `actual-feature-name.md` above MUST be replaced with the actual saved filename!
+   **注記**: 上記の `actual-feature-name.md` は実際に保存されたファイル名に置き換え必須!
 
-4. **Immediately terminate current response** (Stop here. No more tool calls.)
+4. **現在の応答を直ちに終了** (ここで停止。追加のツール呼び出しなし。)
 
-**ABSOLUTELY FORBIDDEN**:
-- Ask user "Y/N" then auto-execute (execution is `/ccg:execute`'s responsibility)
-- Any write operations to production code
-- Automatically call `/ccg:execute` or any implementation actions
-- Continue triggering model calls when user hasn't explicitly requested modifications
-
----
-
-## Plan Saving
-
-After planning completes, save plan to:
-
-- **First planning**: `.claude/plan/<feature-name>.md`
-- **Iteration versions**: `.claude/plan/<feature-name>-v2.md`, `.claude/plan/<feature-name>-v3.md`...
-
-Plan file write should complete before presenting plan to user.
+**絶対に禁止**:
+- ユーザーに「Y/N」と尋ねて自動実行 (実行は `/ccg:execute` の責任)
+- 本番コードへの書き込み操作
+- `/ccg:execute` または実装アクション自動呼び出し
+- ユーザーが明示的に変更をリクエストしていない場合のモデル呼び出しの継続トリガー
 
 ---
 
-## Plan Modification Flow
+## 計画の保存
 
-If user requests plan modifications:
+計画が完了した後、計画を保存:
 
-1. Adjust plan content based on user feedback
-2. Update `.claude/plan/<feature-name>.md` file
-3. Re-present modified plan
-4. Prompt user to review or execute again
+- **最初の計画**: `.claude/plan/<feature-name>.md`
+- **反復バージョン**: `.claude/plan/<feature-name>-v2.md`, `.claude/plan/<feature-name>-v3.md`...
+
+計画ファイルの書き込みがユーザーに計画を提示する前に完了する必須。
 
 ---
 
-## Next Steps
+## 計画変更フロー
 
-After user approves, **manually** execute:
+ユーザーが計画の変更をリクエストする場合:
+
+1. ユーザーのフィードバックに基づいて計画内容を調整
+2. `.claude/plan/<feature-name>.md` ファイルを更新
+3. 変更された計画を再度提示
+4. ユーザーにレビューまたは再度実行するようにプロンプト
+
+---
+
+## 次のステップ
+
+ユーザーが承認した後、**手動で**実行:
 
 ```bash
 /ccg:execute .claude/plan/<feature-name>.md
@@ -252,10 +252,10 @@ After user approves, **manually** execute:
 
 ---
 
-## Key Rules
+## 主要なルール
 
-1. **Plan only, no implementation** – This command does not execute any code changes
-2. **No Y/N prompts** – Only present plan, let user decide next steps
-3. **Trust Rules** – Backend follows Codex, Frontend follows Gemini
-4. External models have **zero filesystem write access**
-5. **SESSION_ID Handoff** – Plan must include `CODEX_SESSION` / `GEMINI_SESSION` at end (for `/ccg:execute resume <SESSION_ID>` use)
+1. **計画のみ、実装なし** – このコマンドはコード変更を実行しません
+2. **Y/N プロンプトなし** – 計画を提示するだけで、ユーザーに次のステップを決定させる
+3. **信頼ルール** – バックエンドは Codex に従う、フロントエンドは Gemini に従う
+4. 外部モデルは **ゼロのファイルシステム書き込みアクセス**
+5. **SESSION_ID ハンドオフ** – 計画は末尾に `CODEX_SESSION` / `GEMINI_SESSION` を含む必須 (`/ccg:execute resume <SESSION_ID>` 使用用)

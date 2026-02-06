@@ -1,59 +1,59 @@
-# Verification Command
+# 検証コマンド
 
-Run comprehensive verification on current codebase state.
+現在のコードベース状態に対する包括的な検証を実行します。
 
-## Instructions
+## 指示
 
-Execute verification in this exact order:
+この正確な順序で検証を実行:
 
-1. **Build Check**
-   - Run the build command for this project
-   - If it fails, report errors and STOP
+1. **ビルドチェック**
+   - このプロジェクトのビルドコマンドを実行
+   - 失敗した場合、エラーを報告して停止
 
-2. **Type Check**
-   - Run TypeScript/type checker
-   - Report all errors with file:line
+2. **型チェック**
+   - TypeScript/型チェッカーを実行
+   - ファイル:行ですべてのエラーを報告
 
-3. **Lint Check**
-   - Run linter
-   - Report warnings and errors
+3. **リントチェック**
+   - リンターを実行
+   - 警告とエラーを報告
 
-4. **Test Suite**
-   - Run all tests
-   - Report pass/fail count
-   - Report coverage percentage
+4. **テストスイート**
+   - すべてのテストを実行
+   - 成功/失敗数を報告
+   - カバレッジ割合を報告
 
-5. **Console.log Audit**
-   - Search for console.log in source files
-   - Report locations
+5. **Console.log 監査**
+   - ソースファイル内の console.log を検索
+   - 位置を報告
 
-6. **Git Status**
-   - Show uncommitted changes
-   - Show files modified since last commit
+6. **Git ステータス**
+   - コミットされていない変更を表示
+   - 最後のコミット以降に変更されたファイルを表示
 
-## Output
+## 出力
 
-Produce a concise verification report:
+簡潔な検証レポートを生成:
 
 ```
-VERIFICATION: [PASS/FAIL]
+検証: [成功/失敗]
 
-Build:    [OK/FAIL]
-Types:    [OK/X errors]
-Lint:     [OK/X issues]
-Tests:    [X/Y passed, Z% coverage]
-Secrets:  [OK/X found]
-Logs:     [OK/X console.logs]
+ビルド:    [OK/失敗]
+型:        [OK/X エラー]
+リント:     [OK/X 問題]
+テスト:    [X/Y 成功, Z% カバレッジ]
+シークレット: [OK/X 見つかった]
+ログ:     [OK/X console.logs]
 
-Ready for PR: [YES/NO]
+PR 準備完了: [はい/いいえ]
 ```
 
-If any critical issues, list them with fix suggestions.
+重大な問題がある場合、修正提案付きで一覧表示します。
 
-## Arguments
+## 引数
 
-$ARGUMENTS can be:
-- `quick` - Only build + types
-- `full` - All checks (default)
-- `pre-commit` - Checks relevant for commits
-- `pre-pr` - Full checks plus security scan
+$ARGUMENTS は以下の場合があります:
+- `quick` - ビルド + 型のみ
+- `full` - すべてのチェック (デフォルト)
+- `pre-commit` - コミットに関連するチェック
+- `pre-pr` - 完全なチェック + セキュリティスキャン

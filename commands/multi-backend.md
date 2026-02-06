@@ -1,27 +1,27 @@
-# Backend - Backend-Focused Development
+# バックエンド - バックエンド中心開発
 
-Backend-focused workflow (Research → Ideation → Plan → Execute → Optimize → Review), Codex-led.
+バックエンド中心のワークフロー (リサーチ → 着想 → プラン → 実行 → 最適化 → レビュー)、Codex主導。
 
-## Usage
+## 使用法
 
 ```bash
-/backend <backend task description>
+/backend <バックエンドタスク説明>
 ```
 
-## Context
+## コンテキスト
 
-- Backend task: $ARGUMENTS
-- Codex-led, Gemini for auxiliary reference
-- Applicable: API design, algorithm implementation, database optimization, business logic
+- バックエンドタスク: $ARGUMENTS
+- Codex主導、補足参照用に Gemini
+- 適用: API設計、アルゴリズム実装、データベース最適化、ビジネスロジック
 
-## Your Role
+## あなたの役割
 
-You are the **Backend Orchestrator**, coordinating multi-model collaboration for server-side tasks (Research → Ideation → Plan → Execute → Optimize → Review).
+あなたは **バックエンドオーケストレーター** で、サーバーサイドタスク用のマルチモデル協力を調整します (リサーチ → 着想 → プラン → 実行 → 最適化 → レビュー)。
 
-**Collaborative Models**:
-- **Codex** – Backend logic, algorithms (**Backend authority, trustworthy**)
-- **Gemini** – Frontend perspective (**Backend opinions for reference only**)
-- **Claude (self)** – Orchestration, planning, execution, delivery
+**協力モデル**:
+- **Codex** – バックエンドロジック、アルゴリズム (**バックエンド権限, 信頼できる**)
+- **Gemini** – フロントエンド視点 (**バックエンド意見は参考用のみ**)
+- **Claude (自分)** – オーケストレーション、計画、実行、配信
 
 ---
 
@@ -61,98 +61,98 @@ EOF",
 })
 ```
 
-**Role Prompts**:
+**ロールプロンプト**:
 
-| Phase | Codex |
+| フェーズ | Codex |
 |-------|-------|
-| Analysis | `~/.claude/.ccg/prompts/codex/analyzer.md` |
-| Planning | `~/.claude/.ccg/prompts/codex/architect.md` |
-| Review | `~/.claude/.ccg/prompts/codex/reviewer.md` |
+| 分析 | `~/.claude/.ccg/prompts/codex/analyzer.md` |
+| 計画 | `~/.claude/.ccg/prompts/codex/architect.md` |
+| レビュー | `~/.claude/.ccg/prompts/codex/reviewer.md` |
 
-**Session Reuse**: Each call returns `SESSION_ID: xxx`, use `resume xxx` for subsequent phases. Save `CODEX_SESSION` in Phase 2, use `resume` in Phases 3 and 5.
-
----
-
-## Communication Guidelines
-
-1. Start responses with mode label `[Mode: X]`, initial is `[Mode: Research]`
-2. Follow strict sequence: `Research → Ideation → Plan → Execute → Optimize → Review`
-3. Use `AskUserQuestion` tool for user interaction when needed (e.g., confirmation/selection/approval)
+**セッション再利用**: 各呼び出しは `SESSION_ID: xxx` を返します、後続フェーズに `resume xxx` を使用。フェーズ 2 で `CODEX_SESSION` を保存、フェーズ 3 と 5 で `resume` を使用。
 
 ---
 
-## Core Workflow
+## コミュニケーションガイドライン
 
-### Phase 0: Prompt Enhancement (Optional)
+1. モードラベル `[Mode: X]` で応答を開始、最初は `[Mode: Research]`
+2. 厳密なシーケンスを従う: `リサーチ → 着想 → プラン → 実行 → 最適化 → レビュー`
+3. 必要に応じて `AskUserQuestion` ツールをユーザーインタラクション用に使用 (例: 確認/選択/承認)
 
-`[Mode: Prepare]` - If ace-tool MCP available, call `mcp__ace-tool__enhance_prompt`, **replace original $ARGUMENTS with enhanced result for subsequent Codex calls**
+---
 
-### Phase 1: Research
+## コアワークフロー
 
-`[Mode: Research]` - Understand requirements and gather context
+### フェーズ 0: プロンプト強化 (オプション)
 
-1. **Code Retrieval** (if ace-tool MCP available): Call `mcp__ace-tool__search_context` to retrieve existing APIs, data models, service architecture
-2. Requirement completeness score (0-10): >=7 continue, <7 stop and supplement
+`[Mode: Prepare]` - ace-tool MCP が利用可能な場合、`mcp__ace-tool__enhance_prompt` を呼び出し、**後続の Codex 呼び出し用に元の $ARGUMENTS を強化結果に置き換える**
 
-### Phase 2: Ideation
+### フェーズ 1: リサーチ
 
-`[Mode: Ideation]` - Codex-led analysis
+`[Mode: Research]` - 要件を理解してコンテキストを収集
 
-**MUST call Codex** (follow call specification above):
+1. **コード取得** (ace-tool MCP が利用可能な場合): `mcp__ace-tool__search_context` を呼び出して既存 API、データモデル、サービスアーキテクチャを取得
+2. 要件の完全性スコア (0-10): >=7 継続、<7 停止して補足
+
+### フェーズ 2: 着想
+
+`[Mode: Ideation]` - Codex 主導の分析
+
+**Codex を呼び出す必須** (上記の呼び出し仕様に従う):
 - ROLE_FILE: `~/.claude/.ccg/prompts/codex/analyzer.md`
-- Requirement: Enhanced requirement (or $ARGUMENTS if not enhanced)
-- Context: Project context from Phase 1
-- OUTPUT: Technical feasibility analysis, recommended solutions (at least 2), risk assessment
+- 要件: 強化された要件 (強化されない場合は $ARGUMENTS)
+- コンテキスト: フェーズ 1 からのプロジェクトコンテキスト
+- 出力: 技術的な実行可能性分析、推奨ソリューション (最低 2 つ以上)、リスク評価
 
-**Save SESSION_ID** (`CODEX_SESSION`) for subsequent phase reuse.
+**SESSION_ID** (`CODEX_SESSION`) を後続フェーズ再利用用に保存。
 
-Output solutions (at least 2), wait for user selection.
+ソリューション (最低 2 つ以上) を出力し、ユーザーの選択を待つ。
 
-### Phase 3: Planning
+### フェーズ 3: プラン
 
-`[Mode: Plan]` - Codex-led planning
+`[Mode: Plan]` - Codex 主導の計画
 
-**MUST call Codex** (use `resume <CODEX_SESSION>` to reuse session):
+**Codex を呼び出す必須** (セッション再利用に `resume <CODEX_SESSION>` を使用):
 - ROLE_FILE: `~/.claude/.ccg/prompts/codex/architect.md`
-- Requirement: User's selected solution
-- Context: Analysis results from Phase 2
-- OUTPUT: File structure, function/class design, dependency relationships
+- 要件: ユーザーが選択したソリューション
+- コンテキスト: フェーズ 2 からの分析結果
+- 出力: ファイル構造、関数/クラス設計、依存性関係
 
-Claude synthesizes plan, save to `.claude/plan/task-name.md` after user approval.
+Claude がプランを合成し、ユーザーの承認後に `.claude/plan/task-name.md` に保存。
 
-### Phase 4: Implementation
+### フェーズ 4: 実装
 
-`[Mode: Execute]` - Code development
+`[Mode: Execute]` - コード開発
 
-- Strictly follow approved plan
-- Follow existing project code standards
-- Ensure error handling, security, performance optimization
+- 承認されたプランに厳密に従う
+- 既存プロジェクトコード標準に従う
+- エラーハンドリング、セキュリティ、パフォーマンス最適化を確認
 
-### Phase 5: Optimization
+### フェーズ 5: 最適化
 
-`[Mode: Optimize]` - Codex-led review
+`[Mode: Optimize]` - Codex 主導のレビュー
 
-**MUST call Codex** (follow call specification above):
+**Codex を呼び出す必須** (上記の呼び出し仕様に従う):
 - ROLE_FILE: `~/.claude/.ccg/prompts/codex/reviewer.md`
-- Requirement: Review the following backend code changes
-- Context: git diff or code content
-- OUTPUT: Security, performance, error handling, API compliance issues list
+- 要件: 次のバックエンドコード変更をレビュー
+- コンテキスト: git diff またはコードコンテンツ
+- 出力: セキュリティ、パフォーマンス、エラーハンドリング、API コンプライアンス問題リスト
 
-Integrate review feedback, execute optimization after user confirmation.
+レビューフィードバックを統合し、ユーザーの確認後に最適化を実行。
 
-### Phase 6: Quality Review
+### フェーズ 6: 品質レビュー
 
-`[Mode: Review]` - Final evaluation
+`[Mode: Review]` - 最終評価
 
-- Check completion against plan
-- Run tests to verify functionality
-- Report issues and recommendations
+- プランに対する完了を確認
+- テストを実行して機能を検証
+- 問題と推奨事項を報告
 
 ---
 
-## Key Rules
+## 主要なルール
 
-1. **Codex backend opinions are trustworthy**
-2. **Gemini backend opinions for reference only**
-3. External models have **zero filesystem write access**
-4. Claude handles all code writes and file operations
+1. **Codex バックエンド意見は信頼できます**
+2. **Gemini バックエンド意見は参考用のみ**
+3. 外部モデルは **ゼロのファイルシステム書き込みアクセス**
+4. Claude はすべてのコード書き込みとファイル操作を処理

@@ -1,47 +1,47 @@
 ---
-description: Comprehensive Python code review for PEP 8 compliance, type hints, security, and Pythonic idioms. Invokes the python-reviewer agent.
+description: PEP 8 コンプライアンス、型ヒント、セキュリティ、Pythonic イディオムのための包括的な Python コードレビュー。python-reviewer エージェントを呼び出します。
 ---
 
-# Python Code Review
+# Python コードレビュー
 
-This command invokes the **python-reviewer** agent for comprehensive Python-specific code review.
+このコマンドは **python-reviewer** エージェントを呼び出して、Python固有の包括的なコードレビューを実行します。
 
-## What This Command Does
+## このコマンドが行うこと
 
-1. **Identify Python Changes**: Find modified `.py` files via `git diff`
-2. **Run Static Analysis**: Execute `ruff`, `mypy`, `pylint`, `black --check`
-3. **Security Scan**: Check for SQL injection, command injection, unsafe deserialization
-4. **Type Safety Review**: Analyze type hints and mypy errors
-5. **Pythonic Code Check**: Verify code follows PEP 8 and Python best practices
-6. **Generate Report**: Categorize issues by severity
+1. **Python 変更を特定**: `git diff` で変更された `.py` ファイルを検索
+2. **静的分析を実行**: `ruff`, `mypy`, `pylint`, `black --check` を実行
+3. **セキュリティスキャン**: SQLインジェクション、コマンドインジェクション、安全でないデシリアライゼーションをチェック
+4. **型安全性レビュー**: 型ヒントと mypy エラーを分析
+5. **Pythonic コードチェック**: コードが PEP 8 と Python ベストプラクティスに従っていることを確認
+6. **レポート生成**: 重要度別に問題を分類
 
-## When to Use
+## いつ使用するか
 
-Use `/python-review` when:
-- After writing or modifying Python code
-- Before committing Python changes
-- Reviewing pull requests with Python code
-- Onboarding to a new Python codebase
-- Learning Pythonic patterns and idioms
+以下の場合に `/python-review` を使用してください:
+- Python コードを書いたり変更した後
+- Python 変更をコミットする前
+- Python コードを含むプルリクエストをレビューするとき
+- 新しい Python コードベースへのオンボーディング時
+- Pythonic パターンとイディオムを学ぶときに
 
-## Review Categories
+## レビューカテゴリー
 
-### CRITICAL (Must Fix)
-- SQL/Command injection vulnerabilities
-- Unsafe eval/exec usage
-- Pickle unsafe deserialization
-- Hardcoded credentials
-- YAML unsafe load
-- Bare except clauses hiding errors
+### 重大 (修正する必要がある)
+- SQLインジェクション/コマンドインジェクション脆弱性
+- 安全でない eval/exec の使用法
+- Pickle の安全でないデシリアライゼーション
+- ハードコードされたクレデンシャル
+- YAML の安全でないロード
+- エラーを隠すむき出しの except 句
 
-### HIGH (Should Fix)
-- Missing type hints on public functions
-- Mutable default arguments
-- Swallowing exceptions silently
-- Not using context managers for resources
-- C-style looping instead of comprehensions
-- Using type() instead of isinstance()
-- Race conditions without locks
+### 高い (修正すべき)
+- パブリック関数の型ヒントの欠落
+- ミューテーション可能なデフォルト引数
+- 例外を静かに飲み込む
+- リソース用のコンテキストマネージャーを使用していない
+- 内包表記の代わりに C スタイルループ
+- isinstance() の代わりに type() を使用
+- ロックなしの競合状態
 
 ### MEDIUM (Consider)
 - PEP 8 formatting violations
@@ -52,206 +52,206 @@ Use `/python-review` when:
 - Not using f-strings for formatting
 - Unnecessary list creation
 
-## Automated Checks Run
+## 実行される自動チェック
 
 ```bash
-# Type checking
+# 型チェック
 mypy .
 
-# Linting and formatting
+# リントとフォーマット
 ruff check .
 black --check .
 isort --check-only .
 
-# Security scanning
+# セキュリティスキャン
 bandit -r .
 
-# Dependency audit
+# 依存性監査
 pip-audit
 safety check
 
-# Testing
+# テスト
 pytest --cov=app --cov-report=term-missing
 ```
 
-## Example Usage
+## 使用例
 
 ```text
-User: /python-review
+ユーザー: /python-review
 
-Agent:
-# Python Code Review Report
+エージェント:
+# Python コードレビューレポート
 
-## Files Reviewed
-- app/routes/user.py (modified)
-- app/services/auth.py (modified)
+## レビュー済みファイル
+- app/routes/user.py (変更)
+- app/services/auth.py (変更)
 
-## Static Analysis Results
-✓ ruff: No issues
-✓ mypy: No errors
-⚠️ black: 2 files need reformatting
-✓ bandit: No security issues
+## 静的分析結果
+✓ ruff: 問題なし
+✓ mypy: エラーなし
+⚠️ black: 2 ファイルがフォーマット必要
+✓ bandit: セキュリティ問題なし
 
-## Issues Found
+## 見つかった問題
 
-[CRITICAL] SQL Injection vulnerability
-File: app/routes/user.py:42
-Issue: User input directly interpolated into SQL query
+[重大] SQL インジェクション脆弱性
+ファイル: app/routes/user.py:42
+問題: ユーザー入力が SQL クエリに直接挿入されている
 ```python
-query = f"SELECT * FROM users WHERE id = {user_id}"  # Bad
+query = f"SELECT * FROM users WHERE id = {user_id}"  # 悪い
 ```
-Fix: Use parameterized query
+修正: パラメータ化されたクエリを使用
 ```python
-query = "SELECT * FROM users WHERE id = %s"  # Good
+query = "SELECT * FROM users WHERE id = %s"  # 良い
 cursor.execute(query, (user_id,))
 ```
 
-[HIGH] Mutable default argument
-File: app/services/auth.py:18
-Issue: Mutable default argument causes shared state
+[高い] ミューテーション可能なデフォルト引数
+ファイル: app/services/auth.py:18
+問題: ミューテーション可能なデフォルト引数は共有状態を引き起こす
 ```python
-def process_items(items=[]):  # Bad
+def process_items(items=[]):  # 悪い
     items.append("new")
     return items
 ```
-Fix: Use None as default
+修正: デフォルトとして None を使用
 ```python
-def process_items(items=None):  # Good
+def process_items(items=None):  # 良い
     if items is None:
         items = []
     items.append("new")
     return items
 ```
 
-[MEDIUM] Missing type hints
-File: app/services/auth.py:25
-Issue: Public function without type annotations
+[中程度] 型ヒントの欠落
+ファイル: app/services/auth.py:25
+問題: 型アノテーションなしのパブリック関数
 ```python
-def get_user(user_id):  # Bad
+def get_user(user_id):  # 悪い
     return db.find(user_id)
 ```
-Fix: Add type hints
+修正: 型ヒントを追加
 ```python
-def get_user(user_id: str) -> Optional[User]:  # Good
+def get_user(user_id: str) -> Optional[User]:  # 良い
     return db.find(user_id)
 ```
 
-[MEDIUM] Not using context manager
-File: app/routes/user.py:55
-Issue: File not closed on exception
+[中程度] コンテキストマネージャーを使用していない
+ファイル: app/routes/user.py:55
+問題: 例外でファイルが閉じられない
 ```python
-f = open("config.json")  # Bad
+f = open("config.json")  # 悪い
 data = f.read()
 f.close()
 ```
-Fix: Use context manager
+修正: コンテキストマネージャーを使用
 ```python
-with open("config.json") as f:  # Good
+with open("config.json") as f:  # 良い
     data = f.read()
 ```
 
-## Summary
-- CRITICAL: 1
-- HIGH: 1
-- MEDIUM: 2
+## サマリー
+- 重大: 1
+- 高い: 1
+- 中程度: 2
 
-Recommendation: ❌ Block merge until CRITICAL issue is fixed
+推奨: ❌ 重大な問題が修正されるまでマージをブロック
 
-## Formatting Required
-Run: `black app/routes/user.py app/services/auth.py`
+## フォーマット必須
+実行: `black app/routes/user.py app/services/auth.py`
 ```
 
-## Approval Criteria
+## 承認基準
 
-| Status | Condition |
+| ステータス | 条件 |
 |--------|-----------|
-| ✅ Approve | No CRITICAL or HIGH issues |
-| ⚠️ Warning | Only MEDIUM issues (merge with caution) |
-| ❌ Block | CRITICAL or HIGH issues found |
+| ✅ 承認 | 重大または高い問題なし |
+| ⚠️ 警告 | 中程度の問題のみ (注意してマージ) |
+| ❌ ブロック | 重大または高い問題が見つかった |
 
-## Integration with Other Commands
+## 他のコマンドとの統合
 
-- Use `/python-test` first to ensure tests pass
-- Use `/code-review` for non-Python specific concerns
-- Use `/python-review` before committing
-- Use `/build-fix` if static analysis tools fail
+- テストが成功することを確認するために `/python-test` を最初に実行
+- Python 固有以外の懸念については `/code-review` を使用
+- コミット前に `/python-review` を実行
+- 静的分析ツールが失敗した場合は `/build-fix` を使用
 
-## Framework-Specific Reviews
+## フレームワーク固有のレビュー
 
-### Django Projects
-The reviewer checks for:
-- N+1 query issues (use `select_related` and `prefetch_related`)
-- Missing migrations for model changes
-- Raw SQL usage when ORM could work
-- Missing `transaction.atomic()` for multi-step operations
+### Django プロジェクト
+レビューは以下をチェック:
+- N+1 クエリ問題 (`select_related` と `prefetch_related` を使用)
+- モデル変更用の欠落マイグレーション
+- ORM が機能する場合の生SQL使用法
+- マルチステップ操作用の欠落 `transaction.atomic()`
 
-### FastAPI Projects
-The reviewer checks for:
-- CORS misconfiguration
-- Pydantic models for request validation
-- Response models correctness
-- Proper async/await usage
-- Dependency injection patterns
+### FastAPI プロジェクト
+レビューは以下をチェック:
+- CORS 誤設定
+- リクエスト検証用の Pydantic モデル
+- レスポンスモデルの正確性
+- 適切な async/await 使用法
+- 依存性注入パターン
 
-### Flask Projects
-The reviewer checks for:
-- Context management (app context, request context)
-- Proper error handling
-- Blueprint organization
-- Configuration management
+### Flask プロジェクト
+レビューは以下をチェック:
+- コンテキスト管理 (アプリコンテキスト、リクエストコンテキスト)
+- 適切なエラーハンドリング
+- ブループリント組織
+- 設定管理
 
-## Related
+## 関連
 
-- Agent: `agents/python-reviewer.md`
-- Skills: `skills/python-patterns/`, `skills/python-testing/`
+- エージェント: `agents/python-reviewer.md`
+- スキル: `skills/python-patterns/`, `skills/python-testing/`
 
-## Common Fixes
+## 一般的な修正
 
-### Add Type Hints
+### 型ヒントを追加
 ```python
-# Before
+# 前
 def calculate(x, y):
     return x + y
 
-# After
+# 後
 from typing import Union
 
 def calculate(x: Union[int, float], y: Union[int, float]) -> Union[int, float]:
     return x + y
 ```
 
-### Use Context Managers
+### コンテキストマネージャーを使用
 ```python
-# Before
+# 前
 f = open("file.txt")
 data = f.read()
 f.close()
 
-# After
+# 後
 with open("file.txt") as f:
     data = f.read()
 ```
 
-### Use List Comprehensions
+### リスト内包表記を使用
 ```python
-# Before
+# 前
 result = []
 for item in items:
     if item.active:
         result.append(item.name)
 
-# After
+# 後
 result = [item.name for item in items if item.active]
 ```
 
-### Fix Mutable Defaults
+### ミューテーション可能なデフォルトを修正
 ```python
-# Before
+# 前
 def append(value, items=[]):
     items.append(value)
     return items
 
-# After
+# 後
 def append(value, items=None):
     if items is None:
         items = []
@@ -259,39 +259,39 @@ def append(value, items=None):
     return items
 ```
 
-### Use f-strings (Python 3.6+)
+### f-strings を使用 (Python 3.6+)
 ```python
-# Before
+# 前
 name = "Alice"
 greeting = "Hello, " + name + "!"
 greeting2 = "Hello, {}".format(name)
 
-# After
+# 後
 greeting = f"Hello, {name}!"
 ```
 
-### Fix String Concatenation in Loops
+### ループ内での文字列連結を修正
 ```python
-# Before
+# 前
 result = ""
 for item in items:
     result += str(item)
 
-# After
+# 後
 result = "".join(str(item) for item in items)
 ```
 
-## Python Version Compatibility
+## Python バージョン互換性
 
-The reviewer notes when code uses features from newer Python versions:
+レビューアーは、より新しい Python バージョンの機能を使用するコードに注記します:
 
-| Feature | Minimum Python |
+| 機能 | 最小 Python |
 |---------|----------------|
-| Type hints | 3.5+ |
+| 型ヒント | 3.5+ |
 | f-strings | 3.6+ |
-| Walrus operator (`:=`) | 3.8+ |
-| Position-only parameters | 3.8+ |
-| Match statements | 3.10+ |
-| Type unions (&#96;x &#124; None&#96;) | 3.10+ |
+| ウォルス演算子 (`:=`) | 3.8+ |
+| 位置専用パラメーター | 3.8+ |
+| Match ステートメント | 3.10+ |
+| 型ユニオン (`x &#124; None`) | 3.10+ |
 
-Ensure your project's `pyproject.toml` or `setup.py` specifies the correct minimum Python version.
+プロジェクトの `pyproject.toml` または `setup.py` が正しい最小 Python バージョンを指定していることを確認してください。

@@ -1,32 +1,32 @@
 ---
 name: skill-create
-description: Analyze local git history to extract coding patterns and generate SKILL.md files. Local version of the Skill Creator GitHub App.
+description: ローカルの git 履歴を分析してコーディングパターンを抽出し、SKILL.md ファイルを生成します。スキルクリエーター GitHub アプリのローカル版。
 allowed_tools: ["Bash", "Read", "Write", "Grep", "Glob"]
 ---
 
-# /skill-create - Local Skill Generation
+# /skill-create - ローカルスキル生成
 
-Analyze your repository's git history to extract coding patterns and generate SKILL.md files that teach Claude your team's practices.
+リポジトリの git 履歴を分析してコーディングパターンを抽出し、Claude にあなたのチームの実践を教える SKILL.md ファイルを生成します。
 
-## Usage
+## 使用法
 
 ```bash
-/skill-create                    # Analyze current repo
-/skill-create --commits 100      # Analyze last 100 commits
-/skill-create --output ./skills  # Custom output directory
-/skill-create --instincts        # Also generate instincts for continuous-learning-v2
+/skill-create                    # 現在のリポを分析
+/skill-create --commits 100      # 最後の 100 個のコミットを分析
+/skill-create --output ./skills  # カスタム出力ディレクトリ
+/skill-create --instincts        # また continuous-learning-v2 用のインスティンクトを生成
 ```
 
-## What It Does
+## 何をするか
 
-1. **Parses Git History** - Analyzes commits, file changes, and patterns
-2. **Detects Patterns** - Identifies recurring workflows and conventions
-3. **Generates SKILL.md** - Creates valid Claude Code skill files
-4. **Optionally Creates Instincts** - For the continuous-learning-v2 system
+1. **Git 履歴を解析** - コミット、ファイル変更、パターンを分析
+2. **パターンを検出** - 繰り返されるワークフローと規約を特定
+3. **SKILL.md を生成** - 有効な Claude Code スキルファイルを作成
+4. **オプションでインスティンクトを作成** - continuous-learning-v2 システム用
 
-## Analysis Steps
+## 分析ステップ
 
-### Step 1: Gather Git Data
+### ステップ 1: Git データを収集
 
 ```bash
 # Get recent commits with file changes
@@ -39,9 +39,9 @@ git log --oneline -n 200 --name-only | grep -v "^$" | grep -v "^[a-f0-9]" | sort
 git log --oneline -n 200 | cut -d' ' -f2- | head -50
 ```
 
-### Step 2: Detect Patterns
+### ステップ 2: パターンを検出
 
-Look for these pattern types:
+これらのパターンタイプを探します:
 
 | Pattern | Detection Method |
 |---------|-----------------|
@@ -51,9 +51,9 @@ Look for these pattern types:
 | **Architecture** | Folder structure and naming conventions |
 | **Testing patterns** | Test file locations, naming, coverage |
 
-### Step 3: Generate SKILL.md
+### ステップ 3: SKILL.md を生成
 
-Output format:
+出力形式:
 
 ```markdown
 ---
@@ -79,9 +79,9 @@ analyzed_commits: {count}
 {detected test conventions}
 ```
 
-### Step 4: Generate Instincts (if --instincts)
+### ステップ 4: インスティンクトを生成 (--instincts の場合)
 
-For continuous-learning-v2 integration:
+continuous-learning-v2 統合の場合:
 
 ```yaml
 ---
@@ -102,9 +102,9 @@ Prefix commits with: feat:, fix:, chore:, docs:, test:, refactor:
 - {percentage}% follow conventional commit format
 ```
 
-## Example Output
+## 出力例
 
-Running `/skill-create` on a TypeScript project might produce:
+TypeScript プロジェクトで `/skill-create` を実行すると以下が生成されることがあります:
 
 ```markdown
 ---
@@ -155,20 +155,20 @@ src/
 - Framework: Vitest
 ```
 
-## GitHub App Integration
+## GitHub アプリ統合
 
-For advanced features (10k+ commits, team sharing, auto-PRs), use the [Skill Creator GitHub App](https://github.com/apps/skill-creator):
+高度な機能 (10k+ コミット、チーム共有、自動 PR) については、[Skill Creator GitHub アプリ](https://github.com/apps/skill-creator)を使用してください:
 
-- Install: [github.com/apps/skill-creator](https://github.com/apps/skill-creator)
-- Comment `/skill-creator analyze` on any issue
-- Receives PR with generated skills
+- インストール: [github.com/apps/skill-creator](https://github.com/apps/skill-creator)
+- 任意の issue に `/skill-creator analyze` とコメント
+- 生成されたスキル付きの PR を受け取ります
 
-## Related Commands
+## 関連コマンド
 
-- `/instinct-import` - Import generated instincts
-- `/instinct-status` - View learned instincts
-- `/evolve` - Cluster instincts into skills/agents
+- `/instinct-import` - 生成されたインスティンクトをインポート
+- `/instinct-status` - 学習したインスティンクトを表示
+- `/evolve` - インスティンクトをスキル/エージェントにクラスタリング
 
 ---
 
-*Part of [Everything Claude Code](https://github.com/affaan-m/everything-claude-code)*
+*[Everything Claude Code](https://github.com/affaan-m/everything-claude-code) の一部*

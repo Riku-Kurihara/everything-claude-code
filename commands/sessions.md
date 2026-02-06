@@ -1,23 +1,23 @@
-# Sessions Command
+# セッションコマンド
 
-Manage Claude Code session history - list, load, alias, and edit sessions stored in `~/.claude/sessions/`.
+Claude Code セッション履歴を管理 - `~/.claude/sessions/` に保存されているセッションをリスト、ロード、エイリアス、編集。
 
-## Usage
+## 使用法
 
 `/sessions [list|load|alias|info|help] [options]`
 
-## Actions
+## アクション
 
-### List Sessions
+### セッション一覧
 
-Display all sessions with metadata, filtering, and pagination.
+メタデータ、フィルタリング、ページング付きのすべてのセッションを表示。
 
 ```bash
-/sessions                              # List all sessions (default)
-/sessions list                         # Same as above
-/sessions list --limit 10              # Show 10 sessions
-/sessions list --date 2026-02-01       # Filter by date
-/sessions list --search abc            # Search by session ID
+/sessions                              # すべてのセッションをリスト (デフォルト)
+/sessions list                         # 上記と同じ
+/sessions list --limit 10              # 10 個のセッションを表示
+/sessions list --date 2026-02-01       # 日付でフィルタリング
+/sessions list --search abc            # セッション ID で検索
 ```
 
 **Script:**
@@ -48,15 +48,15 @@ for (const s of result.sessions) {
 "
 ```
 
-### Load Session
+### セッションをロード
 
-Load and display a session's content (by ID or alias).
+セッションの内容をロードして表示 (ID またはエイリアスで)。
 
 ```bash
-/sessions load <id|alias>             # Load session
-/sessions load 2026-02-01             # By date (for no-id sessions)
-/sessions load a1b2c3d4               # By short ID
-/sessions load my-alias               # By alias name
+/sessions load <id|alias>             # セッションをロード
+/sessions load 2026-02-01             # 日付で (ID なしセッションの場合)
+/sessions load a1b2c3d4               # 短い ID で
+/sessions load my-alias               # エイリアス名で
 ```
 
 **Script:**
@@ -111,13 +111,13 @@ if (session.metadata.lastUpdated) {
 " "$ARGUMENTS"
 ```
 
-### Create Alias
+### エイリアスを作成
 
-Create a memorable alias for a session.
+セッション用に覚えやすいエイリアスを作成。
 
 ```bash
-/sessions alias <id> <name>           # Create alias
-/sessions alias 2026-02-01 today-work # Create alias named "today-work"
+/sessions alias <id> <name>           # エイリアスを作成
+/sessions alias 2026-02-01 today-work # "today-work" という名前のエイリアスを作成
 ```
 
 **Script:**
@@ -151,13 +151,13 @@ if (result.success) {
 " "$ARGUMENTS"
 ```
 
-### Remove Alias
+### エイリアスを削除
 
-Delete an existing alias.
+既存のエイリアスを削除。
 
 ```bash
-/sessions alias --remove <name>        # Remove alias
-/sessions unalias <name>               # Same as above
+/sessions alias --remove <name>        # エイリアスを削除
+/sessions unalias <name>               # 上記と同じ
 ```
 
 **Script:**
@@ -181,12 +181,12 @@ if (result.success) {
 " "$ARGUMENTS"
 ```
 
-### Session Info
+### セッション情報
 
-Show detailed information about a session.
+セッションの詳細情報を表示。
 
 ```bash
-/sessions info <id|alias>              # Show session details
+/sessions info <id|alias>              # セッション詳細を表示
 ```
 
 **Script:**
@@ -228,12 +228,12 @@ if (aliases.length > 0) {
 " "$ARGUMENTS"
 ```
 
-### List Aliases
+### エイリアスをリスト
 
-Show all session aliases.
+すべてのセッションエイリアスを表示。
 
 ```bash
-/sessions aliases                      # List all aliases
+/sessions aliases                      # すべてのエイリアスをリスト
 ```
 
 **Script:**
@@ -260,46 +260,46 @@ if (aliases.length === 0) {
 "
 ```
 
-## Arguments
+## 引数
 
 $ARGUMENTS:
-- `list [options]` - List sessions
-  - `--limit <n>` - Max sessions to show (default: 50)
-  - `--date <YYYY-MM-DD>` - Filter by date
-  - `--search <pattern>` - Search in session ID
-- `load <id|alias>` - Load session content
-- `alias <id> <name>` - Create alias for session
-- `alias --remove <name>` - Remove alias
-- `unalias <name>` - Same as `--remove`
-- `info <id|alias>` - Show session statistics
-- `aliases` - List all aliases
-- `help` - Show this help
+- `list [オプション]` - セッションをリスト
+  - `--limit <n>` - 表示するセッションの最大数 (デフォルト: 50)
+  - `--date <YYYY-MM-DD>` - 日付でフィルタリング
+  - `--search <パターン>` - セッション ID で検索
+- `load <id|エイリアス>` - セッション内容をロード
+- `alias <id> <名前>` - セッション用エイリアスを作成
+- `alias --remove <名前>` - エイリアスを削除
+- `unalias <名前>` - `--remove` と同じ
+- `info <id|エイリアス>` - セッション統計を表示
+- `aliases` - すべてのエイリアスをリスト
+- `help` - このヘルプを表示
 
-## Examples
+## 例
 
 ```bash
-# List all sessions
+# すべてのセッションをリスト
 /sessions list
 
-# Create an alias for today's session
+# 今日のセッション用エイリアスを作成
 /sessions alias 2026-02-01 today
 
-# Load session by alias
+# エイリアスでセッションをロード
 /sessions load today
 
-# Show session info
+# セッション情報を表示
 /sessions info today
 
-# Remove alias
+# エイリアスを削除
 /sessions alias --remove today
 
-# List all aliases
+# すべてのエイリアスをリスト
 /sessions aliases
 ```
 
-## Notes
+## 注記
 
-- Sessions are stored as markdown files in `~/.claude/sessions/`
-- Aliases are stored in `~/.claude/session-aliases.json`
-- Session IDs can be shortened (first 4-8 characters usually unique enough)
-- Use aliases for frequently referenced sessions
+- セッションは `~/.claude/sessions/` にマークダウンファイルとして保存されます
+- エイリアスは `~/.claude/session-aliases.json` に保存されます
+- セッション ID は短縮可能です (最初の 4-8 文字で通常は十分ユニークです)
+- 頻繁に参照されるセッションにはエイリアスを使用してください
