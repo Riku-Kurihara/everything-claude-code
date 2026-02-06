@@ -1,4 +1,4 @@
-**Language:** English | [繁體中文](docs/zh-TW/README.md)
+**言語:** 日本語 | [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](docs/zh-TW/README.md)
 
 # Everything Claude Code
 
@@ -13,29 +13,19 @@
 ![Java](https://img.shields.io/badge/-Java-ED8B00?logo=openjdk&logoColor=white)
 ![Markdown](https://img.shields.io/badge/-Markdown-000000?logo=markdown&logoColor=white)
 
-> **41K+ stars** | **5K+ forks** | **22 contributors** | **6 languages supported**
+> **41K+ スター** | **5K+ フォーク** | **22 コントリビューター** | **6言語対応**
 
 ---
 
-<div align="center">
+**Anthropic ハッカソン優勝者による、完全な Claude Code 設定のコレクション。**
 
-**🌐 Language / 语言 / 語言**
-
-[**English**](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](docs/zh-TW/README.md)
-
-</div>
+本番環境対応のエージェント、スキル、フック、コマンド、ルール、MCP設定は、実際の製品開発で10ヶ月以上の集約的な日々の使用から進化しています。
 
 ---
 
-**The complete collection of Claude Code configs from an Anthropic hackathon winner.**
+## ガイド
 
-Production-ready agents, skills, hooks, commands, rules, and MCP configurations evolved over 10+ months of intensive daily use building real products.
-
----
-
-## The Guides
-
-This repo is the raw code only. The guides explain everything.
+このリポジトリはコードのみです。ガイドがすべてを説明します。
 
 <table>
 <tr>
@@ -51,357 +41,357 @@ This repo is the raw code only. The guides explain everything.
 </td>
 </tr>
 <tr>
-<td align="center"><b>Shorthand Guide</b><br/>Setup, foundations, philosophy. <b>Read this first.</b></td>
-<td align="center"><b>Longform Guide</b><br/>Token optimization, memory persistence, evals, parallelization.</td>
+<td align="center"><b>ショートハンドガイド</b><br/>セットアップ、基礎、哲学。<b>最初にこれを読んでください。</b></td>
+<td align="center"><b>ロングフォームガイド</b><br/>トークン最適化、メモリ永続化、評価、並列化。</td>
 </tr>
 </table>
 
-| Topic | What You'll Learn |
-|-------|-------------------|
-| Token Optimization | Model selection, system prompt slimming, background processes |
-| Memory Persistence | Hooks that save/load context across sessions automatically |
-| Continuous Learning | Auto-extract patterns from sessions into reusable skills |
-| Verification Loops | Checkpoint vs continuous evals, grader types, pass@k metrics |
-| Parallelization | Git worktrees, cascade method, when to scale instances |
-| Subagent Orchestration | The context problem, iterative retrieval pattern |
+| トピック | 学べること |
+|---------|----------|
+| トークン最適化 | モデル選択、システムプロンプト削減、バックグラウンドプロセス |
+| メモリ永続化 | セッション間で自動的にコンテキストを保存/読み込むフック |
+| 継続的学習 | セッションから再利用可能なスキルへのパターン自動抽出 |
+| 検証ループ | チェックポイント vs 継続的評価、グレーダータイプ、pass@k メトリクス |
+| 並列化 | Git ワークツリー、カスケード方式、インスタンス スケーリング時期 |
+| サブエージェント オーケストレーション | コンテキスト問題、反復取得パターン |
 
 ---
 
-## What's New
+## 新機能
 
-### v1.4.1 — Bug Fix (Feb 2026)
+### v1.4.1 — バグ修正 (2026年2月)
 
-- **Fixed instinct import content loss** — `parse_instinct_file()` was silently dropping all content after frontmatter (Action, Evidence, Examples sections) during `/instinct-import`. Fixed by community contributor @ericcai0814 ([#148](https://github.com/affaan-m/everything-claude-code/issues/148), [#161](https://github.com/affaan-m/everything-claude-code/pull/161))
+- **instinct インポートのコンテンツロス修正** — `/instinct-import` 中に `parse_instinct_file()` がフロントマター後のすべてのコンテンツ(Action、Evidence、Examples セクション)を誤って削除していました。コミュニティ コントリビューター @ericcai0814 により修正 ([#148](https://github.com/affaan-m/everything-claude-code/issues/148), [#161](https://github.com/affaan-m/everything-claude-code/pull/161))
 
-### v1.4.0 — Multi-Language Rules, Installation Wizard & PM2 (Feb 2026)
+### v1.4.0 — マルチ言語ルール、インストール ウィザード & PM2 (2026年2月)
 
-- **Interactive installation wizard** — New `configure-ecc` skill provides guided setup with merge/overwrite detection
-- **PM2 & multi-agent orchestration** — 6 new commands (`/pm2`, `/multi-plan`, `/multi-execute`, `/multi-backend`, `/multi-frontend`, `/multi-workflow`) for managing complex multi-service workflows
-- **Multi-language rules architecture** — Rules restructured from flat files into `common/` + `typescript/` + `python/` + `golang/` directories. Install only the languages you need
-- **Chinese (zh-CN) translations** — Complete translation of all agents, commands, skills, and rules (80+ files)
-- **GitHub Sponsors support** — Sponsor the project via GitHub Sponsors
-- **Enhanced CONTRIBUTING.md** — Detailed PR templates for each contribution type
+- **インタラクティブ インストール ウィザード** — 新しい `configure-ecc` スキルがマージ/上書き検出を備えたガイド付きセットアップを提供
+- **PM2 & マルチエージェント オーケストレーション** — 複雑なマルチサービス ワークフロー管理用の6つの新しいコマンド (`/pm2`、`/multi-plan`、`/multi-execute`、`/multi-backend`、`/multi-frontend`、`/multi-workflow`)
+- **マルチ言語ルール アーキテクチャ** — ルールが フラットファイルから `common/` + `typescript/` + `python/` + `golang/` ディレクトリ に再構成。必要な言語のみをインストール
+- **中国語 (zh-CN) 翻訳** — すべてのエージェント、コマンド、スキル、ルールの完全翻訳 (80+ ファイル)
+- **GitHub Sponsors サポート** — GitHub Sponsors でプロジェクトをスポンサー
+- **強化された CONTRIBUTING.md** — 各貢献タイプ向けの詳細なPRテンプレート
 
-### v1.3.0 — OpenCode Plugin Support (Feb 2026)
+### v1.3.0 — OpenCode プラグイン サポート (2026年2月)
 
-- **Full OpenCode integration** — 12 agents, 24 commands, 16 skills with hook support via OpenCode's plugin system (20+ event types)
-- **3 native custom tools** — run-tests, check-coverage, security-audit
-- **LLM documentation** — `llms.txt` for comprehensive OpenCode docs
+- **完全な OpenCode 統合** — OpenCode のプラグイン システム経由でのフック サポート付き 12 エージェント、24 コマンド、16 スキル (20+ イベント タイプ)
+- **3つのネイティブ カスタム ツール** — run-tests、check-coverage、security-audit
+- **LLM ドキュメント** — OpenCode ドキュメント用の `llms.txt`
 
-### v1.2.0 — Unified Commands & Skills (Feb 2026)
+### v1.2.0 — 統一コマンド & スキル (2026年2月)
 
-- **Python/Django support** — Django patterns, security, TDD, and verification skills
-- **Java Spring Boot skills** — Patterns, security, TDD, and verification for Spring Boot
-- **Session management** — `/sessions` command for session history
-- **Continuous learning v2** — Instinct-based learning with confidence scoring, import/export, evolution
+- **Python/Django サポート** — Django パターン、セキュリティ、TDD、検証スキル
+- **Java Spring Boot スキル** — Spring Boot 向けのパターン、セキュリティ、TDD、検証
+- **セッション管理** — セッション履歴用の `/sessions` コマンド
+- **継続的学習 v2** — 信頼度スコアリング、インポート/エクスポート、進化を備えた Instinct ベースの学習
 
-See the full changelog in [Releases](https://github.com/affaan-m/everything-claude-code/releases).
+全チェンジログは [Releases](https://github.com/affaan-m/everything-claude-code/releases) を参照してください。
 
 ---
 
-## 🚀 Quick Start
+## 🚀 クイック スタート
 
-Get up and running in under 2 minutes:
+2分以内でセットアップ:
 
-### Step 1: Install the Plugin
+### ステップ 1: プラグインをインストール
 
 ```bash
-# Add marketplace
+# マーケットプレイスを追加
 /plugin marketplace add affaan-m/everything-claude-code
 
-# Install plugin
+# プラグインをインストール
 /plugin install everything-claude-code@everything-claude-code
 ```
 
-### Step 2: Install Rules (Required)
+### ステップ 2: ルールをインストール (必須)
 
-> ⚠️ **Important:** Claude Code plugins cannot distribute `rules` automatically. Install them manually:
+> ⚠️ **重要:** Claude Code プラグイン システムは `rules` を自動配布できません。手動でインストールしてください:
 
 ```bash
-# Clone the repo first
+# リポジトリをクローン
 git clone https://github.com/affaan-m/everything-claude-code.git
 
-# Install common rules (required)
+# 共通ルール (必須) をインストール
 cp -r everything-claude-code/rules/common/* ~/.claude/rules/
 
-# Install language-specific rules (pick your stack)
+# 言語別ルール (スタックを選択)
 cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/
 cp -r everything-claude-code/rules/python/* ~/.claude/rules/
 cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 ```
 
-### Step 3: Start Using
+### ステップ 3: 使用開始
 
 ```bash
-# Try a command
-/plan "Add user authentication"
+# コマンドを試す
+/plan "ユーザー認証を追加"
 
-# Check available commands
+# 利用可能なコマンドをチェック
 /plugin list everything-claude-code@everything-claude-code
 ```
 
-✨ **That's it!** You now have access to 15+ agents, 30+ skills, and 30+ commands.
+✨ **完了!** 15+ エージェント、30+ スキル、30+ コマンドにアクセスできるようになりました。
 
 ---
 
-## 🌐 Cross-Platform Support
+## 🌐 クロスプラットフォーム サポート
 
-This plugin now fully supports **Windows, macOS, and Linux**. All hooks and scripts have been rewritten in Node.js for maximum compatibility.
+このプラグインは **Windows、macOS、Linux** を完全サポートしています。すべてのフックとスクリプトは最大の互換性を実現するため Node.js で書き直されています。
 
-### Package Manager Detection
+### パッケージ マネージャー 検出
 
-The plugin automatically detects your preferred package manager (npm, pnpm, yarn, or bun) with the following priority:
+プラグインは次の優先順位で希望するパッケージ マネージャー (npm、pnpm、yarn、bun) を自動検出します:
 
-1. **Environment variable**: `CLAUDE_PACKAGE_MANAGER`
-2. **Project config**: `.claude/package-manager.json`
-3. **package.json**: `packageManager` field
-4. **Lock file**: Detection from package-lock.json, yarn.lock, pnpm-lock.yaml, or bun.lockb
-5. **Global config**: `~/.claude/package-manager.json`
-6. **Fallback**: First available package manager
+1. **環境変数**: `CLAUDE_PACKAGE_MANAGER`
+2. **プロジェクト設定**: `.claude/package-manager.json`
+3. **package.json**: `packageManager` フィールド
+4. **ロック ファイル**: package-lock.json、yarn.lock、pnpm-lock.yaml、bun.lockb から検出
+5. **グローバル設定**: `~/.claude/package-manager.json`
+6. **フォールバック**: 最初に利用可能なパッケージ マネージャー
 
-To set your preferred package manager:
+希望するパッケージ マネージャーを設定:
 
 ```bash
-# Via environment variable
+# 環境変数経由
 export CLAUDE_PACKAGE_MANAGER=pnpm
 
-# Via global config
+# グローバル設定経由
 node scripts/setup-package-manager.js --global pnpm
 
-# Via project config
+# プロジェクト設定経由
 node scripts/setup-package-manager.js --project bun
 
-# Detect current setting
+# 現在の設定を検出
 node scripts/setup-package-manager.js --detect
 ```
 
-Or use the `/setup-pm` command in Claude Code.
+または Claude Code の `/setup-pm` コマンドを使用します。
 
 ---
 
-## 📦 What's Inside
+## 📦 内容
 
-This repo is a **Claude Code plugin** - install it directly or copy components manually.
+このリポジトリは **Claude Code プラグイン** です - 直接インストールするか、コンポーネントを手動でコピーしてください。
 
 ```
 everything-claude-code/
-|-- .claude-plugin/   # Plugin and marketplace manifests
-|   |-- plugin.json         # Plugin metadata and component paths
-|   |-- marketplace.json    # Marketplace catalog for /plugin marketplace add
+|-- .claude-plugin/   # プラグインおよびマーケットプレイス マニフェスト
+|   |-- plugin.json         # プラグイン メタデータとコンポーネント パス
+|   |-- marketplace.json    # /plugin marketplace add 用マーケットプレイス カタログ
 |
-|-- agents/           # Specialized subagents for delegation
-|   |-- planner.md           # Feature implementation planning
-|   |-- architect.md         # System design decisions
-|   |-- tdd-guide.md         # Test-driven development
-|   |-- code-reviewer.md     # Quality and security review
-|   |-- security-reviewer.md # Vulnerability analysis
+|-- agents/           # デリゲーション用の特化したサブエージェント
+|   |-- planner.md           # 機能実装計画
+|   |-- architect.md         # システム設計決定
+|   |-- tdd-guide.md         # テスト駆動開発
+|   |-- code-reviewer.md     # 品質とセキュリティ レビュー
+|   |-- security-reviewer.md # 脆弱性分析
 |   |-- build-error-resolver.md
-|   |-- e2e-runner.md        # Playwright E2E testing
-|   |-- refactor-cleaner.md  # Dead code cleanup
-|   |-- doc-updater.md       # Documentation sync
-|   |-- go-reviewer.md       # Go code review
-|   |-- go-build-resolver.md # Go build error resolution
-|   |-- python-reviewer.md   # Python code review (NEW)
-|   |-- database-reviewer.md # Database/Supabase review (NEW)
+|   |-- e2e-runner.md        # Playwright E2E テスト
+|   |-- refactor-cleaner.md  # デッド コード削除
+|   |-- doc-updater.md       # ドキュメント 同期
+|   |-- go-reviewer.md       # Go コード レビュー
+|   |-- go-build-resolver.md # Go ビルド エラー解決
+|   |-- python-reviewer.md   # Python コード レビュー (NEW)
+|   |-- database-reviewer.md # データベース/Supabase レビュー (NEW)
 |
-|-- skills/           # Workflow definitions and domain knowledge
-|   |-- coding-standards/           # Language best practices
-|   |-- backend-patterns/           # API, database, caching patterns
-|   |-- frontend-patterns/          # React, Next.js patterns
-|   |-- continuous-learning/        # Auto-extract patterns from sessions (Longform Guide)
-|   |-- continuous-learning-v2/     # Instinct-based learning with confidence scoring
-|   |-- iterative-retrieval/        # Progressive context refinement for subagents
-|   |-- strategic-compact/          # Manual compaction suggestions (Longform Guide)
-|   |-- tdd-workflow/               # TDD methodology
-|   |-- security-review/            # Security checklist
-|   |-- eval-harness/               # Verification loop evaluation (Longform Guide)
-|   |-- verification-loop/          # Continuous verification (Longform Guide)
-|   |-- golang-patterns/            # Go idioms and best practices
-|   |-- golang-testing/             # Go testing patterns, TDD, benchmarks
-|   |-- django-patterns/            # Django patterns, models, views (NEW)
-|   |-- django-security/            # Django security best practices (NEW)
-|   |-- django-tdd/                 # Django TDD workflow (NEW)
-|   |-- django-verification/        # Django verification loops (NEW)
-|   |-- python-patterns/            # Python idioms and best practices (NEW)
-|   |-- python-testing/             # Python testing with pytest (NEW)
-|   |-- springboot-patterns/        # Java Spring Boot patterns (NEW)
-|   |-- springboot-security/        # Spring Boot security (NEW)
+|-- skills/           # ワークフロー定義とドメイン知識
+|   |-- coding-standards/           # 言語ベスト プラクティス
+|   |-- backend-patterns/           # API、データベース、キャッシング パターン
+|   |-- frontend-patterns/          # React、Next.js パターン
+|   |-- continuous-learning/        # セッションからのパターン自動抽出 (ロングフォームガイド)
+|   |-- continuous-learning-v2/     # 信頼度スコアリング付き Instinct ベースの学習
+|   |-- iterative-retrieval/        # サブエージェント向けの段階的コンテキスト洗練
+|   |-- strategic-compact/          # 手動コンパクション提案 (ロングフォームガイド)
+|   |-- tdd-workflow/               # TDD 方法論
+|   |-- security-review/            # セキュリティ チェックリスト
+|   |-- eval-harness/               # 検証ループ評価 (ロングフォームガイド)
+|   |-- verification-loop/          # 継続的検証 (ロングフォームガイド)
+|   |-- golang-patterns/            # Go イディオムとベスト プラクティス
+|   |-- golang-testing/             # Go テスト パターン、TDD、ベンチマーク
+|   |-- django-patterns/            # Django パターン、モデル、ビュー (NEW)
+|   |-- django-security/            # Django セキュリティ ベスト プラクティス (NEW)
+|   |-- django-tdd/                 # Django TDD ワークフロー (NEW)
+|   |-- django-verification/        # Django 検証ループ (NEW)
+|   |-- python-patterns/            # Python イディオムとベスト プラクティス (NEW)
+|   |-- python-testing/             # pytest を使用した Python テスト (NEW)
+|   |-- springboot-patterns/        # Java Spring Boot パターン (NEW)
+|   |-- springboot-security/        # Spring Boot セキュリティ (NEW)
 |   |-- springboot-tdd/             # Spring Boot TDD (NEW)
-|   |-- springboot-verification/    # Spring Boot verification (NEW)
-|   |-- configure-ecc/              # Interactive installation wizard (NEW)
+|   |-- springboot-verification/    # Spring Boot 検証 (NEW)
+|   |-- configure-ecc/              # インタラクティブ インストール ウィザード (NEW)
 |
-|-- commands/         # Slash commands for quick execution
-|   |-- tdd.md              # /tdd - Test-driven development
-|   |-- plan.md             # /plan - Implementation planning
-|   |-- e2e.md              # /e2e - E2E test generation
-|   |-- code-review.md      # /code-review - Quality review
-|   |-- build-fix.md        # /build-fix - Fix build errors
-|   |-- refactor-clean.md   # /refactor-clean - Dead code removal
-|   |-- learn.md            # /learn - Extract patterns mid-session (Longform Guide)
-|   |-- checkpoint.md       # /checkpoint - Save verification state (Longform Guide)
-|   |-- verify.md           # /verify - Run verification loop (Longform Guide)
-|   |-- setup-pm.md         # /setup-pm - Configure package manager
-|   |-- go-review.md        # /go-review - Go code review (NEW)
-|   |-- go-test.md          # /go-test - Go TDD workflow (NEW)
-|   |-- go-build.md         # /go-build - Fix Go build errors (NEW)
-|   |-- skill-create.md     # /skill-create - Generate skills from git history (NEW)
-|   |-- instinct-status.md  # /instinct-status - View learned instincts (NEW)
-|   |-- instinct-import.md  # /instinct-import - Import instincts (NEW)
-|   |-- instinct-export.md  # /instinct-export - Export instincts (NEW)
-|   |-- evolve.md           # /evolve - Cluster instincts into skills
-|   |-- pm2.md              # /pm2 - PM2 service lifecycle management (NEW)
-|   |-- multi-plan.md       # /multi-plan - Multi-agent task decomposition (NEW)
-|   |-- multi-execute.md    # /multi-execute - Orchestrated multi-agent workflows (NEW)
-|   |-- multi-backend.md    # /multi-backend - Backend multi-service orchestration (NEW)
-|   |-- multi-frontend.md   # /multi-frontend - Frontend multi-service orchestration (NEW)
-|   |-- multi-workflow.md   # /multi-workflow - General multi-service workflows (NEW)
+|-- commands/         # クイック実行用のスラッシュ コマンド
+|   |-- tdd.md              # /tdd - テスト駆動開発
+|   |-- plan.md             # /plan - 実装計画
+|   |-- e2e.md              # /e2e - E2E テスト生成
+|   |-- code-review.md      # /code-review - 品質 レビュー
+|   |-- build-fix.md        # /build-fix - ビルド エラー修正
+|   |-- refactor-clean.md   # /refactor-clean - デッド コード削除
+|   |-- learn.md            # /learn - セッション中のパターン抽出 (ロングフォームガイド)
+|   |-- checkpoint.md       # /checkpoint - 検証状態の保存 (ロングフォームガイド)
+|   |-- verify.md           # /verify - 検証ループ実行 (ロングフォームガイド)
+|   |-- setup-pm.md         # /setup-pm - パッケージ マネージャー設定
+|   |-- go-review.md        # /go-review - Go コード レビュー (NEW)
+|   |-- go-test.md          # /go-test - Go TDD ワークフロー (NEW)
+|   |-- go-build.md         # /go-build - Go ビルド エラー修正 (NEW)
+|   |-- skill-create.md     # /skill-create - git 履歴からスキル生成 (NEW)
+|   |-- instinct-status.md  # /instinct-status - 学習した instinct を表示 (NEW)
+|   |-- instinct-import.md  # /instinct-import - instinct をインポート (NEW)
+|   |-- instinct-export.md  # /instinct-export - instinct をエクスポート (NEW)
+|   |-- evolve.md           # /evolve - instinct をスキルにクラスター化 (NEW)
+|   |-- pm2.md              # /pm2 - PM2 サービス ライフサイクル管理 (NEW)
+|   |-- multi-plan.md       # /multi-plan - マルチエージェント タスク分解 (NEW)
+|   |-- multi-execute.md    # /multi-execute - オーケストレーション マルチエージェント ワークフロー (NEW)
+|   |-- multi-backend.md    # /multi-backend - バックエンド マルチサービス オーケストレーション (NEW)
+|   |-- multi-frontend.md   # /multi-frontend - フロントエンド マルチサービス オーケストレーション (NEW)
+|   |-- multi-workflow.md   # /multi-workflow - 汎用 マルチサービス ワークフロー (NEW)
 |
-|-- rules/            # Always-follow guidelines (copy to ~/.claude/rules/)
-|   |-- README.md            # Structure overview and installation guide
-|   |-- common/              # Language-agnostic principles
-|   |   |-- coding-style.md    # Immutability, file organization
-|   |   |-- git-workflow.md    # Commit format, PR process
-|   |   |-- testing.md         # TDD, 80% coverage requirement
-|   |   |-- performance.md     # Model selection, context management
-|   |   |-- patterns.md        # Design patterns, skeleton projects
-|   |   |-- hooks.md           # Hook architecture, TodoWrite
-|   |   |-- agents.md          # When to delegate to subagents
-|   |   |-- security.md        # Mandatory security checks
-|   |-- typescript/          # TypeScript/JavaScript specific
-|   |-- python/              # Python specific
-|   |-- golang/              # Go specific
+|-- rules/            # 常に従うべきガイドライン (~/.claude/rules/ にコピー)
+|   |-- README.md            # 構造概要とインストール ガイド
+|   |-- common/              # 言語不問の原則
+|   |   |-- coding-style.md    # 不変性、ファイル構成
+|   |   |-- git-workflow.md    # コミット形式、PR プロセス
+|   |   |-- testing.md         # TDD、80% カバレッジ要件
+|   |   |-- performance.md     # モデル選択、コンテキスト管理
+|   |   |-- patterns.md        # デザイン パターン、スケルトン プロジェクト
+|   |   |-- hooks.md           # フック アーキテクチャ、TodoWrite
+|   |   |-- agents.md          # サブエージェントへのデリゲーション時期
+|   |   |-- security.md        # 必須セキュリティ チェック
+|   |-- typescript/          # TypeScript/JavaScript 固有
+|   |-- python/              # Python 固有
+|   |-- golang/              # Go 固有
 |
-|-- hooks/            # Trigger-based automations
-|   |-- hooks.json                # All hooks config (PreToolUse, PostToolUse, Stop, etc.)
-|   |-- memory-persistence/       # Session lifecycle hooks (Longform Guide)
-|   |-- strategic-compact/        # Compaction suggestions (Longform Guide)
+|-- hooks/            # トリガーベースの自動化
+|   |-- hooks.json                # すべてのフック設定 (PreToolUse、PostToolUse、Stop など)
+|   |-- memory-persistence/       # セッション ライフサイクル フック (ロングフォームガイド)
+|   |-- strategic-compact/        # コンパクション提案 (ロングフォームガイド)
 |
-|-- scripts/          # Cross-platform Node.js scripts (NEW)
-|   |-- lib/                     # Shared utilities
-|   |   |-- utils.js             # Cross-platform file/path/system utilities
-|   |   |-- package-manager.js   # Package manager detection and selection
-|   |-- hooks/                   # Hook implementations
-|   |   |-- session-start.js     # Load context on session start
-|   |   |-- session-end.js       # Save state on session end
-|   |   |-- pre-compact.js       # Pre-compaction state saving
-|   |   |-- suggest-compact.js   # Strategic compaction suggestions
-|   |   |-- evaluate-session.js  # Extract patterns from sessions
-|   |-- setup-package-manager.js # Interactive PM setup
+|-- scripts/          # クロスプラットフォーム Node.js スクリプト (NEW)
+|   |-- lib/                     # 共有ユーティリティ
+|   |   |-- utils.js             # クロスプラットフォーム ファイル/パス/システム ユーティリティ
+|   |   |-- package-manager.js   # パッケージ マネージャー 検出と選択
+|   |-- hooks/                   # フック実装
+|   |   |-- session-start.js     # セッション開始時にコンテキストを読み込む
+|   |   |-- session-end.js       # セッション終了時に状態を保存
+|   |   |-- pre-compact.js       # コンパクション前状態の保存
+|   |   |-- suggest-compact.js   # 戦略的コンパクション提案
+|   |   |-- evaluate-session.js  # セッションからパターンを抽出
+|   |-- setup-package-manager.js # インタラクティブ PM セットアップ
 |
-|-- tests/            # Test suite (NEW)
-|   |-- lib/                     # Library tests
-|   |-- hooks/                   # Hook tests
-|   |-- run-all.js               # Run all tests
+|-- tests/            # テスト スイート (NEW)
+|   |-- lib/                     # ライブラリ テスト
+|   |-- hooks/                   # フック テスト
+|   |-- run-all.js               # すべてのテストを実行
 |
-|-- contexts/         # Dynamic system prompt injection contexts (Longform Guide)
-|   |-- dev.md              # Development mode context
-|   |-- review.md           # Code review mode context
-|   |-- research.md         # Research/exploration mode context
+|-- contexts/         # 動的システム プロンプト注入コンテキスト (ロングフォームガイド)
+|   |-- dev.md              # 開発モード コンテキスト
+|   |-- review.md           # コード レビュー モード コンテキスト
+|   |-- research.md         # 研究/探索モード コンテキスト
 |
-|-- examples/         # Example configurations and sessions
-|   |-- CLAUDE.md           # Example project-level config
-|   |-- user-CLAUDE.md      # Example user-level config
+|-- examples/         # 設定例とセッション例
+|   |-- CLAUDE.md           # プロジェクト レベル設定例
+|   |-- user-CLAUDE.md      # ユーザー レベル設定例
 |
-|-- mcp-configs/      # MCP server configurations
-|   |-- mcp-servers.json    # GitHub, Supabase, Vercel, Railway, etc.
+|-- mcp-configs/      # MCP サーバー設定
+|   |-- mcp-servers.json    # GitHub、Supabase、Vercel、Railway など
 |
-|-- marketplace.json  # Self-hosted marketplace config (for /plugin marketplace add)
+|-- marketplace.json  # セルフホスト型マーケットプレイス設定 (/plugin marketplace add 用)
 ```
 
 ---
 
-## 🛠️ Ecosystem Tools
+## 🛠️ エコシステム ツール
 
-### Skill Creator
+### スキル クリエーター
 
-Two ways to generate Claude Code skills from your repository:
+リポジトリから Claude Code スキルを生成する2つの方法:
 
-#### Option A: Local Analysis (Built-in)
+#### オプション A: ローカル分析 (組み込み)
 
-Use the `/skill-create` command for local analysis without external services:
+外部サービスなしでローカル分析用に `/skill-create` コマンドを使用:
 
 ```bash
-/skill-create                    # Analyze current repo
-/skill-create --instincts        # Also generate instincts for continuous-learning
+/skill-create                    # 現在のリポジトリを分析
+/skill-create --instincts        # 継続的学習用の instinct も生成
 ```
 
-This analyzes your git history locally and generates SKILL.md files.
+これはあなたの git 履歴をローカルで分析し、SKILL.md ファイルを生成します。
 
-#### Option B: GitHub App (Advanced)
+#### オプション B: GitHub App (高度)
 
-For advanced features (10k+ commits, auto-PRs, team sharing):
+高度な機能 (10k+ コミット、自動PR、チーム共有) 用:
 
-[Install GitHub App](https://github.com/apps/skill-creator) | [ecc.tools](https://ecc.tools)
+[GitHub App をインストール](https://github.com/apps/skill-creator) | [ecc.tools](https://ecc.tools)
 
 ```bash
-# Comment on any issue:
+# 任意のイシュー上でコメント:
 /skill-creator analyze
 
-# Or auto-triggers on push to default branch
+# または デフォルト ブランチへのプッシュで自動トリガー
 ```
 
-Both options create:
-- **SKILL.md files** - Ready-to-use skills for Claude Code
-- **Instinct collections** - For continuous-learning-v2
-- **Pattern extraction** - Learns from your commit history
+両方のオプションが生成:
+- **SKILL.md ファイル** - Claude Code で使用可能な即座に使えるスキル
+- **Instinct コレクション** - 継続的学習用
+- **パターン抽出** - コミット履歴から学習
 
-### 🧠 Continuous Learning v2
+### 🧠 継続的学習 v2
 
-The instinct-based learning system automatically learns your patterns:
+Instinct ベースの学習システムが自動的にあなたのパターンを学習:
 
 ```bash
-/instinct-status        # Show learned instincts with confidence
-/instinct-import <file> # Import instincts from others
-/instinct-export        # Export your instincts for sharing
-/evolve                 # Cluster related instincts into skills
+/instinct-status        # 信頼度付きの学習した instinct を表示
+/instinct-import <file> # 他のユーザーの instinct をインポート
+/instinct-export        # あなたの instinct をエクスポートして共有
+/evolve                 # 関連する instinct をスキルにクラスター化
 ```
 
-See `skills/continuous-learning-v2/` for full documentation.
+完全なドキュメントは `skills/continuous-learning-v2/` を参照してください。
 
 ---
 
-## 📋 Requirements
+## 📋 要件
 
-### Claude Code CLI Version
+### Claude Code CLI バージョン
 
-**Minimum version: v2.1.0 or later**
+**最小バージョン: v2.1.0 以降**
 
-This plugin requires Claude Code CLI v2.1.0+ due to changes in how the plugin system handles hooks.
+このプラグインはプラグイン システムがフックを処理する方法の変更により Claude Code CLI v2.1.0+ が必要です。
 
-Check your version:
+バージョンを確認:
 ```bash
 claude --version
 ```
 
-### Important: Hooks Auto-Loading Behavior
+### 重要: フック自動読み込み動作
 
-> ⚠️ **For Contributors:** Do NOT add a `"hooks"` field to `.claude-plugin/plugin.json`. This is enforced by a regression test.
+> ⚠️ **コントリビューター向け:** `.claude-plugin/plugin.json` に `"hooks"` フィールドを追加しないでください。これはリグレッション テストで実施されます。
 
-Claude Code v2.1+ **automatically loads** `hooks/hooks.json` from any installed plugin by convention. Explicitly declaring it in `plugin.json` causes a duplicate detection error:
+Claude Code v2.1+ は規約により、インストール済みプラグインから `hooks/hooks.json` を **自動的に読み込みます**。`plugin.json` で明示的に宣言するとリダイレクト エラーが発生します:
 
 ```
 Duplicate hooks file detected: ./hooks/hooks.json resolves to already-loaded file
 ```
 
-**History:** This has caused repeated fix/revert cycles in this repo ([#29](https://github.com/affaan-m/everything-claude-code/issues/29), [#52](https://github.com/affaan-m/everything-claude-code/issues/52), [#103](https://github.com/affaan-m/everything-claude-code/issues/103)). The behavior changed between Claude Code versions, leading to confusion. We now have a regression test to prevent this from being reintroduced.
+**履歴:** これはこのリポジトリで繰り返しの修正/復帰サイクルを引き起こしています ([#29](https://github.com/affaan-m/everything-claude-code/issues/29)、[#52](https://github.com/affaan-m/everything-claude-code/issues/52)、[#103](https://github.com/affaan-m/everything-claude-code/issues/103))。Claude Code バージョン間で動作が変更されているため、混乱が生じています。現在、リグレッション テストでこれが再導入されるのを防いでいます。
 
 ---
 
-## 📥 Installation
+## 📥 インストール
 
-### Option 1: Install as Plugin (Recommended)
+### オプション 1: プラグインとしてインストール (推奨)
 
-The easiest way to use this repo - install as a Claude Code plugin:
+このリポジトリを使用する最も簡単な方法 - Claude Code プラグインとしてインストール:
 
 ```bash
-# Add this repo as a marketplace
+# このリポジトリをマーケットプレイスとして追加
 /plugin marketplace add affaan-m/everything-claude-code
 
-# Install the plugin
+# プラグインをインストール
 /plugin install everything-claude-code@everything-claude-code
 ```
 
-Or add directly to your `~/.claude/settings.json`:
+または `~/.claude/settings.json` に直接追加:
 
 ```json
 {
@@ -419,134 +409,134 @@ Or add directly to your `~/.claude/settings.json`:
 }
 ```
 
-This gives you instant access to all commands, agents, skills, and hooks.
+これにより、すべてのコマンド、エージェント、スキル、フックに即座にアクセスできます。
 
-> **Note:** The Claude Code plugin system does not support distributing `rules` via plugins ([upstream limitation](https://code.claude.com/docs/en/plugins-reference)). You need to install rules manually:
+> **注:** Claude Code プラグイン システムはプラグイン経由での `rules` 配布をサポートしていません ([上流の制限](https://code.claude.com/docs/en/plugins-reference))。ルールを手動でインストールする必要があります:
 >
 > ```bash
-> # Clone the repo first
+> # リポジトリをクローン
 > git clone https://github.com/affaan-m/everything-claude-code.git
 >
-> # Option A: User-level rules (applies to all projects)
+> # オプション A: ユーザー レベル ルール (すべてのプロジェクトに適用)
 > cp -r everything-claude-code/rules/common/* ~/.claude/rules/
-> cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # pick your stack
+> cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # スタックを選択
 > cp -r everything-claude-code/rules/python/* ~/.claude/rules/
 > cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 >
-> # Option B: Project-level rules (applies to current project only)
+> # オプション B: プロジェクト レベル ルール (現在のプロジェクトのみに適用)
 > mkdir -p .claude/rules
 > cp -r everything-claude-code/rules/common/* .claude/rules/
-> cp -r everything-claude-code/rules/typescript/* .claude/rules/     # pick your stack
+> cp -r everything-claude-code/rules/typescript/* .claude/rules/     # スタックを選択
 > ```
 
 ---
 
-### 🔧 Option 2: Manual Installation
+### 🔧 オプション 2: 手動インストール
 
-If you prefer manual control over what's installed:
+インストール対象を細かく制御したい場合:
 
 ```bash
-# Clone the repo
+# リポジトリをクローン
 git clone https://github.com/affaan-m/everything-claude-code.git
 
-# Copy agents to your Claude config
+# エージェントを Claude 設定にコピー
 cp everything-claude-code/agents/*.md ~/.claude/agents/
 
-# Copy rules (common + language-specific)
+# ルール (共通 + 言語別) をコピー
 cp -r everything-claude-code/rules/common/* ~/.claude/rules/
-cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # pick your stack
+cp -r everything-claude-code/rules/typescript/* ~/.claude/rules/   # スタックを選択
 cp -r everything-claude-code/rules/python/* ~/.claude/rules/
 cp -r everything-claude-code/rules/golang/* ~/.claude/rules/
 
-# Copy commands
+# コマンドをコピー
 cp everything-claude-code/commands/*.md ~/.claude/commands/
 
-# Copy skills
+# スキルをコピー
 cp -r everything-claude-code/skills/* ~/.claude/skills/
 ```
 
-#### Add hooks to settings.json
+#### フックを settings.json に追加
 
-Copy the hooks from `hooks/hooks.json` to your `~/.claude/settings.json`.
+`hooks/hooks.json` からフックをコピーして、`~/.claude/settings.json` に追加します。
 
-#### Configure MCPs
+#### MCP を設定
 
-Copy desired MCP servers from `mcp-configs/mcp-servers.json` to your `~/.claude.json`.
+`mcp-configs/mcp-servers.json` から希望する MCP サーバーをコピーして、`~/.claude.json` に追加します。
 
-**Important:** Replace `YOUR_*_HERE` placeholders with your actual API keys.
+**重要:** `YOUR_*_HERE` プレースホルダーを実際の API キーに置き換えてください。
 
 ---
 
-## 🎯 Key Concepts
+## 🎯 主要概念
 
-### Agents
+### エージェント
 
-Subagents handle delegated tasks with limited scope. Example:
+サブエージェントは限定的なスコープで委譲タスクを処理します。例:
 
 ```markdown
 ---
 name: code-reviewer
-description: Reviews code for quality, security, and maintainability
+description: コード品質、セキュリティ、保守性をレビュー
 tools: ["Read", "Grep", "Glob", "Bash"]
 model: opus
 ---
 
-You are a senior code reviewer...
+シニア コード レビュアーです...
 ```
 
-### Skills
+### スキル
 
-Skills are workflow definitions invoked by commands or agents:
+スキルはコマンドまたはエージェントから呼び出されるワークフロー定義です:
 
 ```markdown
-# TDD Workflow
+# TDD ワークフロー
 
-1. Define interfaces first
-2. Write failing tests (RED)
-3. Implement minimal code (GREEN)
-4. Refactor (IMPROVE)
-5. Verify 80%+ coverage
+1. インターフェースを最初に定義
+2. 失敗テストを作成 (RED)
+3. 最小限のコードを実装 (GREEN)
+4. リファクタリング (IMPROVE)
+5. 80%+ カバレッジを検証
 ```
 
-### Hooks
+### フック
 
-Hooks fire on tool events. Example - warn about console.log:
+フックはツール イベント時に実行されます。例 - console.log について警告:
 
 ```json
 {
-  "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ts|tsx|js|jsx)$\"",
+  "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\\\\\.(ts|tsx|js|jsx)$\"",
   "hooks": [{
     "type": "command",
-    "command": "#!/bin/bash\ngrep -n 'console\\.log' \"$file_path\" && echo '[Hook] Remove console.log' >&2"
+    "command": "#!/bin/bash\ngrep -n 'console\\\\.log' \"$file_path\" && echo '[Hook] console.log を削除してください' >&2"
   }]
 }
 ```
 
-### Rules
+### ルール
 
-Rules are always-follow guidelines, organized into `common/` (language-agnostic) + language-specific directories:
+ルールは常に従うべきガイドラインで、`common/` (言語不問) + 言語別ディレクトリに構成されています:
 
 ```
 rules/
-  common/          # Universal principles (always install)
-  typescript/      # TS/JS specific patterns and tools
-  python/          # Python specific patterns and tools
-  golang/          # Go specific patterns and tools
+  common/          # 普遍的な原則 (常にインストール)
+  typescript/      # TS/JS 固有パターンとツール
+  python/          # Python 固有パターンとツール
+  golang/          # Go 固有パターンとツール
 ```
 
-See [`rules/README.md`](rules/README.md) for installation and structure details.
+詳細なインストールと構造については [`rules/README.md`](rules/README.md) を参照してください。
 
 ---
 
-## 🧪 Running Tests
+## 🧪 テストを実行
 
-The plugin includes a comprehensive test suite:
+プラグインには包括的なテスト スイートが含まれています:
 
 ```bash
-# Run all tests
+# すべてのテストを実行
 node tests/run-all.js
 
-# Run individual test files
+# 個別のテスト ファイルを実行
 node tests/lib/utils.test.js
 node tests/lib/package-manager.test.js
 node tests/hooks/hooks.test.js
@@ -554,178 +544,178 @@ node tests/hooks/hooks.test.js
 
 ---
 
-## 🤝 Contributing
+## 🤝 コントリビューション
 
-**Contributions are welcome and encouraged.**
+**コントリビューションは歓迎され、奨励されます。**
 
-This repo is meant to be a community resource. If you have:
-- Useful agents or skills
-- Clever hooks
-- Better MCP configurations
-- Improved rules
+このリポジトリはコミュニティ リソースとなることを目的としています。以下がある場合:
+- 役立つエージェントまたはスキル
+- 巧妙なフック
+- より良い MCP 設定
+- 改善されたルール
 
-Please contribute! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+ぜひコントリビューションしてください! ガイドラインは [CONTRIBUTING.md](CONTRIBUTING.md) を参照してください。
 
-### Ideas for Contributions
+### コントリビューション アイデア
 
-- Language-specific skills (Rust, C#, Swift, Kotlin) — Go, Python, Java already included
-- Framework-specific configs (Rails, Laravel, FastAPI, NestJS) — Django, Spring Boot already included
-- DevOps agents (Kubernetes, Terraform, AWS, Docker)
-- Testing strategies (different frameworks, visual regression)
-- Domain-specific knowledge (ML, data engineering, mobile)
+- 言語別スキル (Rust、C#、Swift、Kotlin) — Go、Python、Java は既に含まれています
+- フレームワーク別設定 (Rails、Laravel、FastAPI、NestJS) — Django、Spring Boot は既に含まれています
+- DevOps エージェント (Kubernetes、Terraform、AWS、Docker)
+- テスト戦略 (異なるフレームワーク、ビジュアル リグレッション)
+- ドメイン別知識 (ML、データ エンジニアリング、モバイル)
 
 ---
 
-## 🔌 OpenCode Support
+## 🔌 OpenCode サポート
 
-ECC provides **full OpenCode support** including plugins and hooks.
+ECC はプラグインとフックを含む **完全な OpenCode サポート** を提供します。
 
-### Quick Start
+### クイック スタート
 
 ```bash
-# Install OpenCode
+# OpenCode をインストール
 npm install -g opencode
 
-# Run in the repository root
+# リポジトリ ルートで実行
 opencode
 ```
 
-The configuration is automatically detected from `.opencode/opencode.json`.
+設定は `.opencode/opencode.json` から自動的に検出されます。
 
-### Feature Parity
+### 機能比較
 
-| Feature | Claude Code | OpenCode | Status |
-|---------|-------------|----------|--------|
-| Agents | ✅ 14 agents | ✅ 12 agents | **Claude Code leads** |
-| Commands | ✅ 30 commands | ✅ 24 commands | **Claude Code leads** |
-| Skills | ✅ 28 skills | ✅ 16 skills | **Claude Code leads** |
-| Hooks | ✅ 3 phases | ✅ 20+ events | **OpenCode has more!** |
-| Rules | ✅ 8 rules | ✅ 8 rules | **Full parity** |
-| MCP Servers | ✅ Full | ✅ Full | **Full parity** |
-| Custom Tools | ✅ Via hooks | ✅ Native support | **OpenCode is better** |
+| 機能 | Claude Code | OpenCode | ステータス |
+|------|-------------|----------|---------|
+| エージェント | ✅ 14 エージェント | ✅ 12 エージェント | **Claude Code がリード** |
+| コマンド | ✅ 30 コマンド | ✅ 24 コマンド | **Claude Code がリード** |
+| スキル | ✅ 28 スキル | ✅ 16 スキル | **Claude Code がリード** |
+| フック | ✅ 3 フェーズ | ✅ 20+ イベント | **OpenCode がより多い!** |
+| ルール | ✅ 8 ルール | ✅ 8 ルール | **完全なパリティ** |
+| MCP サーバー | ✅ フル | ✅ フル | **完全なパリティ** |
+| カスタム ツール | ✅ フック経由 | ✅ ネイティブ サポート | **OpenCode がより優れている** |
 
-### Hook Support via Plugins
+### プラグイン経由のフック サポート
 
-OpenCode's plugin system is MORE sophisticated than Claude Code with 20+ event types:
+OpenCode のプラグイン システムは Claude Code より高度な 20+ イベント タイプを備えています:
 
-| Claude Code Hook | OpenCode Plugin Event |
-|-----------------|----------------------|
+| Claude Code フック | OpenCode プラグイン イベント |
+|------------------|--------------------------|
 | PreToolUse | `tool.execute.before` |
 | PostToolUse | `tool.execute.after` |
 | Stop | `session.idle` |
 | SessionStart | `session.created` |
 | SessionEnd | `session.deleted` |
 
-**Additional OpenCode events**: `file.edited`, `file.watcher.updated`, `message.updated`, `lsp.client.diagnostics`, `tui.toast.show`, and more.
+**追加の OpenCode イベント**: `file.edited`、`file.watcher.updated`、`message.updated`、`lsp.client.diagnostics`、`tui.toast.show` など。
 
-### Available Commands (24)
+### 利用可能なコマンド (24)
 
-| Command | Description |
-|---------|-------------|
-| `/plan` | Create implementation plan |
-| `/tdd` | Enforce TDD workflow |
-| `/code-review` | Review code changes |
-| `/security` | Run security review |
-| `/build-fix` | Fix build errors |
-| `/e2e` | Generate E2E tests |
-| `/refactor-clean` | Remove dead code |
-| `/orchestrate` | Multi-agent workflow |
-| `/learn` | Extract patterns from session |
-| `/checkpoint` | Save verification state |
-| `/verify` | Run verification loop |
-| `/eval` | Evaluate against criteria |
-| `/update-docs` | Update documentation |
-| `/update-codemaps` | Update codemaps |
-| `/test-coverage` | Analyze coverage |
-| `/go-review` | Go code review |
-| `/go-test` | Go TDD workflow |
-| `/go-build` | Fix Go build errors |
-| `/skill-create` | Generate skills from git |
-| `/instinct-status` | View learned instincts |
-| `/instinct-import` | Import instincts |
-| `/instinct-export` | Export instincts |
-| `/evolve` | Cluster instincts into skills |
-| `/setup-pm` | Configure package manager |
+| コマンド | 説明 |
+|---------|------|
+| `/plan` | 実装計画を作成 |
+| `/tdd` | TDD ワークフローを実施 |
+| `/code-review` | コード変更をレビュー |
+| `/security` | セキュリティ レビューを実行 |
+| `/build-fix` | ビルド エラーを修正 |
+| `/e2e` | E2E テストを生成 |
+| `/refactor-clean` | デッド コードを削除 |
+| `/orchestrate` | マルチエージェント ワークフロー |
+| `/learn` | セッションからパターンを抽出 |
+| `/checkpoint` | 検証状態を保存 |
+| `/verify` | 検証ループを実行 |
+| `/eval` | 基準に対して評価 |
+| `/update-docs` | ドキュメントを更新 |
+| `/update-codemaps` | コードマップを更新 |
+| `/test-coverage` | カバレッジを分析 |
+| `/go-review` | Go コード レビュー |
+| `/go-test` | Go TDD ワークフロー |
+| `/go-build` | Go ビルド エラーを修正 |
+| `/skill-create` | git からスキルを生成 |
+| `/instinct-status` | 学習した instinct を表示 |
+| `/instinct-import` | instinct をインポート |
+| `/instinct-export` | instinct をエクスポート |
+| `/evolve` | instinct をスキルにクラスター化 |
+| `/setup-pm` | パッケージ マネージャーを設定 |
 
-### Plugin Installation
+### プラグイン インストール
 
-**Option 1: Use directly**
+**オプション 1: 直接使用**
 ```bash
 cd everything-claude-code
 opencode
 ```
 
-**Option 2: Install as npm package**
+**オプション 2: npm パッケージとしてインストール**
 ```bash
 npm install opencode-ecc
 ```
 
-Then add to your `opencode.json`:
+`opencode.json` に追加:
 ```json
 {
   "plugin": ["opencode-ecc"]
 }
 ```
 
-### Documentation
+### ドキュメント
 
-- **Migration Guide**: `.opencode/MIGRATION.md`
-- **OpenCode Plugin README**: `.opencode/README.md`
-- **Consolidated Rules**: `.opencode/instructions/INSTRUCTIONS.md`
-- **LLM Documentation**: `llms.txt` (complete OpenCode docs for LLMs)
-
----
-
-## 📖 Background
-
-I've been using Claude Code since the experimental rollout. Won the Anthropic x Forum Ventures hackathon in Sep 2025 building [zenith.chat](https://zenith.chat) with [@DRodriguezFX](https://x.com/DRodriguezFX) - entirely using Claude Code.
-
-These configs are battle-tested across multiple production applications.
+- **移行ガイド**: `.opencode/MIGRATION.md`
+- **OpenCode プラグイン README**: `.opencode/README.md`
+- **統合ルール**: `.opencode/instructions/INSTRUCTIONS.md`
+- **LLM ドキュメント**: `llms.txt` (OpenCode ドキュメント完全版)
 
 ---
 
-## ⚠️ Important Notes
+## 📖 背景
 
-### Context Window Management
+実験的ロールアウト以来 Claude Code を使用しています。2025年9月に Anthropic x Forum Ventures ハッカソンで [@DRodriguezFX](https://x.com/DRodriguezFX) と共に [zenith.chat](https://zenith.chat) を Claude Code のみを使用して構築して優勝しました。
 
-**Critical:** Don't enable all MCPs at once. Your 200k context window can shrink to 70k with too many tools enabled.
-
-Rule of thumb:
-- Have 20-30 MCPs configured
-- Keep under 10 enabled per project
-- Under 80 tools active
-
-Use `disabledMcpServers` in project config to disable unused ones.
-
-### Customization
-
-These configs work for my workflow. You should:
-1. Start with what resonates
-2. Modify for your stack
-3. Remove what you don't use
-4. Add your own patterns
+これらの設定は複数の本番アプリケーション全体でテストされています。
 
 ---
 
-## 🌟 Star History
+## ⚠️ 重要な注意事項
+
+### コンテキスト ウィンドウ 管理
+
+**重要:** すべての MCP を一度に有効にしないでください。多数のツールを有効にすると、200k コンテキスト ウィンドウが 70k に縮小する可能性があります。
+
+経験則:
+- 20~30 個の MCP を設定
+- プロジェクトごとに 10 個以下を有効
+- 80 個以下のアクティブ ツール
+
+プロジェクト設定で `disabledMcpServers` を使用して未使用のものを無効化します。
+
+### カスタマイズ
+
+これらの設定は私のワークフローに対応しています。あなたはすべき:
+1. 共感するもので開始
+2. スタック用に変更
+3. 使用しないものを削除
+4. 独自のパターンを追加
+
+---
+
+## 🌟 スター 履歴
 
 [![Star History Chart](https://api.star-history.com/svg?repos=affaan-m/everything-claude-code&type=Date)](https://star-history.com/#affaan-m/everything-claude-code&Date)
 
 ---
 
-## 🔗 Links
+## 🔗 リンク
 
-- **Shorthand Guide (Start Here):** [The Shorthand Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
-- **Longform Guide (Advanced):** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
-- **Follow:** [@affaanmustafa](https://x.com/affaanmustafa)
+- **ショートハンド ガイド (ここから開始):** [The Shorthand Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2012378465664745795)
+- **ロングフォーム ガイド (高度):** [The Longform Guide to Everything Claude Code](https://x.com/affaanmustafa/status/2014040193557471352)
+- **フォロー:** [@affaanmustafa](https://x.com/affaanmustafa)
 - **zenith.chat:** [zenith.chat](https://zenith.chat)
 
 ---
 
-## 📄 License
+## 📄 ライセンス
 
-MIT - Use freely, modify as needed, contribute back if you can.
+MIT - 自由に使用、必要に応じて変更、できれば貢献してください。
 
 ---
 
-**Star this repo if it helps. Read both guides. Build something great.**
+**このリポジトリがお役に立つなら、スターしてください。両方のガイドを読んでください。素晴らしいものを構築してください。**
